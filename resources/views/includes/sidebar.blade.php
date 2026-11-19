@@ -74,7 +74,6 @@
 
                     </a>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
                     <a href="{{ route('divisi') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
                                 {{ request()->routeIs('divisi*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
@@ -84,6 +83,7 @@
                         Divisi
 
                     </a>
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jabatan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -312,7 +312,6 @@
 
             </a>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -330,6 +329,7 @@
                         Divisi
 
                     </a>
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jabatan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -360,11 +360,13 @@
                         User / Pegawai
 
                     </a>
+--}}
 
                 </div>
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
