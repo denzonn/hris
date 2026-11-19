@@ -44,6 +44,9 @@ class User extends Authenticatable
         'aktif',
     ];
 
+    /** Sama dengan default kolom DB, supaya model yang baru dibuat langsung punya nilainya. */
+    protected $attributes = ['jatah_cuti' => 12];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -99,5 +102,13 @@ class User extends Authenticatable
     public function absensi(): HasMany
     {
         return $this->hasMany(Absensi::class);
+    }
+
+    /** Sisa cuti = jatah − hari cuti yang sudah tercatat di absensi tahun itu (dihitung, tidak disimpan). */
+    public function sisaCuti(?int $tahun = null): int
+    {
+        $terpakai = $this->absensi()->where('status', 'cuti')->whereYear('tanggal', $tahun ?? now()->year)->count();
+
+        return max(0, $this->jatah_cuti - $terpakai);
     }
 }

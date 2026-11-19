@@ -6,6 +6,7 @@ use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\HariLiburController;
+use App\Http\Controllers\IzinKaryawanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\LemburController;
@@ -66,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('hari_libur/{hari_libur}', [HariLiburController::class, 'destroy'])->name('hari_libur.destroy');
 
         Route::patch('lembur/{lembur}/status', [LemburController::class, 'status'])->name('lembur.status');
+        Route::patch('izin_karyawan/{izin}/status', [IzinKaryawanController::class, 'status'])->name('izin_karyawan.status');
 
         Route::get('absensi_karyawan', [AbsensiKaryawanController::class, 'index'])->name('absensi_karyawan');
         Route::get('absensi_karyawan/data', [AbsensiKaryawanController::class, 'data'])->name('absensi_karyawan.data');
@@ -86,6 +88,14 @@ Route::middleware('auth')->group(function () {
     Route::post('lembur', [LemburController::class, 'store'])->name('lembur.store');
     Route::put('lembur/{lembur}', [LemburController::class, 'update'])->name('lembur.update');
     Route::delete('lembur/{lembur}', [LemburController::class, 'destroy'])->name('lembur.destroy');
+
+    // Izin/sakit/cuti: semua otoritas; karyawan dibatasi ke datanya sendiri di controller
+    Route::get('izin_karyawan', [IzinKaryawanController::class, 'index'])->name('izin_karyawan');
+    Route::get('izin_karyawan/data', [IzinKaryawanController::class, 'data'])->name('izin_karyawan.data');
+    Route::post('izin_karyawan', [IzinKaryawanController::class, 'store'])->name('izin_karyawan.store');
+    Route::put('izin_karyawan/{izin}', [IzinKaryawanController::class, 'update'])->name('izin_karyawan.update');
+    Route::delete('izin_karyawan/{izin}', [IzinKaryawanController::class, 'destroy'])->name('izin_karyawan.destroy');
+    Route::get('izin_karyawan/{izin}/lampiran', [IzinKaryawanController::class, 'lampiran'])->name('izin_karyawan.lampiran');
 });
 
 require __DIR__.'/auth.php';
