@@ -14,8 +14,9 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 4 – Payroll
 - [x] Fase 5 – Dashboard & Portal Karyawan
 - [x] Fase 6 – Rekrutmen
-- [ ] Fase 7 – Kendaraan / Booking
 - [ ] Fase 8 – Hardening & Deploy
+
+> Fase 7 (Kendaraan / Booking) dihapus dari scope — modul operasional bengkel, bukan HR. Menu sidebar terkait sudah dibuang.
 
 ---
 
@@ -233,12 +234,6 @@ Catatan pelaksanaan Fase 6 ✅ Selesai:
 - Jadikan Pegawai: tombol muncul untuk pelamar `diterima` yang belum jadi pegawai → `/user?pelamar={id}` membuka form tambah pegawai terisi (nama, email, no HP, divisi & jabatan dari lowongan, tanggal masuk hari ini). `pelamar_id` dikirim hidden dan divalidasi (`diterima` & belum tertaut); setelah simpan `pelamar.user_id` terisi. Pelamar yang sudah jadi pegawai tidak bisa dihapus/diubah status selain `diterima`.
 - Belum ada: notifikasi email ke pelamar, captcha (andalkan throttle dulu).
 - Seeder: 1 lowongan contoh (Teknisi Audio & Variasi Mobil).
-
----
-
-## Fase 7 – Kendaraan / Booking (sudah ada di sidebar)
-
-Produk Booking, Booking, Pemasangan. Ini terlihat seperti modul operasional bisnis, bukan HR — **konfirmasi dulu scope-nya** sebelum dikerjakan.
 
 ---
 
