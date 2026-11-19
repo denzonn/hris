@@ -36,7 +36,8 @@ php artisan migrate:fresh --seed
 - Validasi selalu via `FormRequest`.
 - Nama route = nama modul snake_case (`absensi_karyawan`, `rekap_absensi`) — sidebar pakai `request()->routeIs('modul*')`.
 - Proteksi akses via middleware otoritas (`users.otoritas_id`: 1 Super Admin, 2 HR/Admin Cabang, 3 Karyawan).
-- Pegawai & data yang punya riwayat **tidak di-hard delete** (pakai `aktif` / SoftDeletes).
+- Pegawai & data yang punya riwayat **tidak di-hard delete** (pakai `aktif` / SoftDeletes). Pola: route `PATCH /{modul}/{id}/aktif` toggle kolom `aktif`.
+- Hapus master yang masih dipakai data lain → cek relasi di controller, balas JSON 422 `{message}` (jangan andalkan error FK).
 
 ## Helper JS global (pakai, jangan buat ulang)
 
@@ -46,7 +47,9 @@ Ada di `resources/js/helpers/*` dan `resources/js/app.js`:
 - Modal & notifikasi: `showModal(id)`, `closeModal(id)`, `showToast`, `App.loading.show/hide`
 - Format: `formatRupiah`, `formatAngka`, `toNumber`, `getNominal`, `formatTanggal`, `formatTanggalIndo`, `formatTanggalJam`, `formatJam`, `formatDurasi`, `formatBadgeStatus`
 - Input: `initDateRangePicker` (Flatpickr), Select2 helper
-- Blade component: `<x-input>`, `<x-select>`
+- Blade component: `<x-input>`, `<x-select name label placeholder>` (option lewat slot); keduanya punya `<p data-error="name">` untuk pesan 422
+- Upload file: kirim `new FormData(form)` via `ajaxRequest({..., processData: false, contentType: false})`, update pakai `POST` + `_method=PUT`
+- Uang di input: tampil `formatRupiah(v, false)` saat ketik, kirim `getNominal(v)`
 
 ## Aturan domain
 

@@ -49,7 +49,7 @@ Catatan pelaksanaan Fase 0:
 
 ---
 
-## Fase 1 – Master Data
+## Fase 1 – Master Data ✅ Selesai
 
 | Step | Tabel | Kolom utama | Catatan |
 |------|-------|-------------|---------|
@@ -62,6 +62,18 @@ Catatan pelaksanaan Fase 0:
 Per step: migration → model + relasi → FormRequest → controller (pola Fase 0.7) → view → route → aktifkan menu sidebar → 1 feature test (CRUD jalan + karyawan biasa ditolak).
 
 Catatan: **Pegawai tidak boleh di-hard delete** (riwayat absensi & payroll ikut hilang) → pakai kolom `aktif` / SoftDeletes.
+
+Catatan pelaksanaan Fase 1:
+
+- Akses: Cabang hanya otoritas 1; Divisi/Jabatan/Jobdesk/Pegawai otoritas 1 & 2 (menu sidebar untuk keduanya sudah aktif).
+- Pegawai = route `user` (`/user`), `UserController` + `UserRequest`. Tidak ada route DELETE; `PATCH /user/{user}/aktif` toggle kolom `aktif`. User nonaktif ditolak saat login (`LoginRequest`), tapi sesi yang sudah login tidak otomatis ditendang.
+- Aturan otoritas: HR tidak bisa memberi otoritas Super Admin (validasi `otoritas_id`) dan tidak bisa mengubah/menonaktifkan akun Super Admin (403). Admin tidak bisa menonaktifkan diri sendiri (422).
+- Validasi tambahan: `jabatan_id` harus milik `divisi_id` yang dipilih; `status_ptkp` dibatasi `TK/0–TK/3, K/0–K/3` (`UserRequest::STATUS_PTKP`).
+- Hapus master yang masih dipakai → 422 + pesan: divisi yang punya jabatan/pegawai, jabatan/cabang yang dipakai pegawai. Jabatan dihapus → jobdesk ikut terhapus (cascade).
+- Foto pegawai di disk `public/pegawai` (`php artisan storage:link` sudah dijalankan; link `public/storage` tidak di-commit, jalankan ulang di mesin lain).
+- `ajaxRequest` sekarang menerima `processData`/`contentType` (untuk FormData).
+- Seeder menambah data contoh: 2 cabang, 3 divisi, 5 jabatan, 2 jobdesk, 3 pegawai (`hr@hris.test`, `teknisi@hris.test`, `kasir@hris.test`, password `password`).
+- Select2 belum dipakai (helper `select2.js` tidak di-import di `app.js`); `<x-select>` masih select biasa.
 
 ---
 
