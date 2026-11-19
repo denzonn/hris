@@ -63,19 +63,21 @@ test('generate payroll menghitung dari absensi & lembur dalam periode cut-off', 
         ->and($payroll->tanggal_selesai->toDateString())->toBe('2026-11-25');
 
     $d = $payroll->detail()->where('user_id', $this->budi->id)->first();
-    // hadir 3 (1 hadir + 2 telat), telat 45 menit, alpha 1, lembur disetujui 120 menit
+    // hari kerja 27 (26 Okt – 25 Nov = 31 hari − 4 Minggu: 1, 8, 15, 22 Nov)
+    // hadir 3 (1 hadir + 2 telat), telat 45 menit, lembur disetujui 120 menit
+    // alpha = 1 tercatat + 22 hari kerja tanpa catatan (27 − 5 hari yang tercatat) = 23
     // upah sebulan = 3.000.000 + 300.000 + 160.000 = 3.460.000 → sejam 20.000 → lembur 2 jam = 30.000 + 40.000
     // tunjangan = 160.000 + 25.000 × 3 = 235.000
-    // bersih = 3.000.000 + 300.000 + 235.000 + 70.000 − 45.000 − 100.000 = 3.460.000
+    // bersih = 3.000.000 + 300.000 + 235.000 + 70.000 − 45.000 − 23 × 100.000 = 1.260.000
     expect($d->only(['nama', 'nik', 'jabatan', 'cabang', 'hari_hadir', 'menit_telat', 'jumlah_alpha', 'menit_lembur']))->toBe([
         'nama' => 'Budi', 'nik' => 'P1', 'jabatan' => 'Teknisi', 'cabang' => 'Pusat',
-        'hari_hadir' => 3, 'menit_telat' => 45, 'jumlah_alpha' => 1, 'menit_lembur' => 120,
-    ])->and($d->hari_kerja)->toBe(27) // 26 Okt – 25 Nov = 31 hari − 4 Minggu (1, 8, 15, 22 Nov)
+        'hari_hadir' => 3, 'menit_telat' => 45, 'jumlah_alpha' => 23, 'menit_lembur' => 120,
+    ])->and($d->hari_kerja)->toBe(27)
         ->and($d->total_tunjangan)->toBe('235000.00')
         ->and($d->upah_lembur)->toBe('70000.00')
         ->and($d->potongan_telat)->toBe('45000.00')
-        ->and($d->potongan_alpha)->toBe('100000.00')
-        ->and($d->gaji_bersih)->toBe('3460000.00');
+        ->and($d->potongan_alpha)->toBe('2300000.00')
+        ->and($d->gaji_bersih)->toBe('1260000.00');
 });
 
 test('super admin, pegawai nonaktif, dan pegawai yang masuk setelah periode tidak ikut payroll', function () {
@@ -159,7 +161,7 @@ test('slip gaji tampil dan detail harus milik payroll tersebut', function () {
     $d = $payroll->detail()->where('user_id', $this->budi->id)->first();
 
     $this->actingAs($this->hr)->get("/payroll/{$payroll->id}/slip/{$d->id}")
-        ->assertOk()->assertSee('Budi')->assertSee('Rp. 3.460.000')->assertSee('Uang Makan')->assertSee('DRAFT');
+        ->assertOk()->assertSee('Budi')->assertSee('Rp. 1.260.000')->assertSee('Uang Makan')->assertSee('DRAFT');
 
     $lain = Payroll::create(['periode' => '2026-12', 'tanggal_mulai' => '2026-11-26', 'tanggal_selesai' => '2026-12-25']);
     $this->actingAs($this->hr)->get("/payroll/{$lain->id}/slip/{$d->id}")->assertNotFound();
@@ -170,7 +172,7 @@ test('halaman detail dan data detail payroll', function () {
 
     $this->actingAs($this->hr)->get("/payroll/{$payroll->id}")->assertOk()->assertSee('Finalkan');
     $this->actingAs($this->hr)->getJson("/payroll/{$payroll->id}/data?search=budi")
-        ->assertOk()->assertJsonPath('total', 1)->assertJsonPath('data.0.gaji_bersih', '3460000.00');
+        ->assertOk()->assertJsonPath('total', 1)->assertJsonPath('data.0.gaji_bersih', '1260000.00');
     $this->actingAs($this->hr)->getJson('/payroll/data')
         ->assertJsonPath('data.0.detail_count', 2);
 });

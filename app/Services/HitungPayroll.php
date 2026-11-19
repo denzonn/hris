@@ -92,7 +92,7 @@ class HitungPayroll
                 $kehadiran = [
                     'hari_hadir' => $u->absensi->whereIn('status', ['hadir', 'telat'])->count(),
                     'menit_telat' => (int) $u->absensi->sum('menit_telat'),
-                    'jumlah_alpha' => $u->absensi->where('status', 'alpha')->count(),
+                    'jumlah_alpha' => $u->jumlahAlpha($u->absensi, $payroll->tanggal_mulai, $payroll->tanggal_selesai),
                 ];
 
                 $hasil = self::hitung($kehadiran + [

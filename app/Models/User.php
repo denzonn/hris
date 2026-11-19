@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 class User extends Authenticatable
 {
@@ -115,6 +117,29 @@ class User extends Authenticatable
     public function komponenGaji(): BelongsToMany
     {
         return $this->belongsToMany(KomponenGaji::class, 'komponen_gaji_user')->withPivot('nominal')->withTimestamps();
+    }
+
+    /**
+     * Alpha dalam periode = baris absensi berstatus alpha
+     * + hari kerja yang sudah lewat (sebelum hari ini, sejak tanggal masuk) tanpa catatan absensi sama sekali.
+     * Jadi potongan tetap benar walau command `absensi:alpha` tidak jalan (cron mati / baru mulai pakai).
+     *
+     * @param  Collection<int, Absensi>  $absensi  baris absensi pegawai ini dalam periode
+     */
+    public function jumlahAlpha(Collection $absensi, CarbonInterface $mulai, CarbonInterface $selesai): int
+    {
+        $tercatatAlpha = $absensi->where('status', 'alpha')->count();
+        $jadwal = $this->cabang?->pengaturanAbsensi;
+        $dari = $this->tanggal_masuk && $this->tanggal_masuk->gt($mulai) ? $this->tanggal_masuk : $mulai;
+        $sampai = $selesai->lt(today()) ? $selesai : today()->subDay();
+
+        if (! $jadwal || $dari->gt($sampai)) {
+            return $tercatatAlpha;
+        }
+
+        $tercatat = $absensi->map(fn ($a) => $a->tanggal->toDateString())->all();
+
+        return $tercatatAlpha + count(array_diff($jadwal->tanggalKerja($dari, $sampai), $tercatat));
     }
 
     /** Sisa cuti = jatah − hari cuti yang sudah tercatat di absensi tahun itu (dihitung, tidak disimpan). */

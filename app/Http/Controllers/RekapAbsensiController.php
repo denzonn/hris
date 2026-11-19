@@ -93,10 +93,13 @@ class RekapAbsensiController extends Controller
                 'absensi as izin' => $status(['izin']),
                 'absensi as sakit' => $status(['sakit']),
                 'absensi as cuti' => $status(['cuti']),
-                'absensi as alpha' => $status(['alpha']),
             ])
             ->withSum(['absensi as menit_telat' => $periode], 'menit_telat')
-            ->with(['lembur' => fn ($q) => $periode($q)->where('status', 'disetujui')])
+            ->with([
+                'lembur' => fn ($q) => $periode($q)->where('status', 'disetujui'),
+                // untuk alpha: hari kerja tanpa catatan juga dihitung (User::jumlahAlpha)
+                'absensi' => fn ($q) => $periode($q)->select('id', 'user_id', 'tanggal', 'status'),
+            ])
             ->orderBy('name');
     }
 
@@ -121,7 +124,7 @@ class RekapAbsensiController extends Controller
                 'izin' => $u->izin,
                 'sakit' => $u->sakit,
                 'cuti' => $u->cuti,
-                'alpha' => $u->alpha,
+                'alpha' => $u->jumlahAlpha($u->absensi, $mulai, $selesai),
                 'lembur_menit' => $u->lembur->sum(fn ($l) => intdiv(strtotime($l->jam_selesai) - strtotime($l->jam_mulai), 60)),
             ];
         });

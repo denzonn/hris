@@ -150,7 +150,7 @@ Catatan pelaksanaan Fase 3:
 - Izin/sakit/cuti: hanya pengajuan `pending` yang bisa diubah/dihapus/diproses (sekali). Disetujui → baris absensi dibuat untuk hari kerja dalam rentang; menimpa `alpha`, tidak menimpa status lain (hadir dll). Pengajuan dari HR langsung disetujui. Bentrok dengan pengajuan pending/disetujui lain ditolak.
 - Saldo cuti: `User::sisaCuti($tahun)` = `jatah_cuti` − jumlah baris absensi `cuti` di tahun itu. Cuti lintas tahun dihitung dari saldo tahun `tanggal_mulai`.
 - Lampiran izin disimpan di disk **`local` (private)**, diunduh lewat `GET /izin_karyawan/{id}/lampiran` (pemilik atau HR/Admin). Path tidak ikut di JSON (`ada_lampiran` saja).
-- Rekap: pegawai aktif (tanpa Super Admin), default bulan berjalan, maksimal 3 bulan. Hari kerja = hari kerja cabang dalam periode penuh (belum memperhitungkan tanggal masuk pegawai). Lembur = lembur `disetujui` saja (menit). CSV pakai pemisah `;` + BOM agar langsung rapi di Excel locale Indonesia.
+- Rekap: pegawai aktif (tanpa Super Admin), default bulan berjalan, maksimal 3 bulan. Hari kerja = hari kerja cabang dalam periode penuh (belum memperhitungkan tanggal masuk pegawai). Lembur = lembur `disetujui` saja (menit). Alpha ikut aturan `User::jumlahAlpha()` (lihat Fase 4). CSV pakai pemisah `;` + BOM agar langsung rapi di Excel locale Indonesia.
 - Alpha otomatis: `php artisan absensi:alpha {tanggal?}`, terjadwal `23:59` di `routes/console.php`. Melewati pegawai nonaktif, tanpa cabang/pengaturan, dan yang `tanggal_masuk`-nya setelah tanggal itu. Aman dijalankan ulang.
 
 ---
@@ -190,6 +190,7 @@ Catatan pelaksanaan Fase 4:
 - **Periode**: `periode` = bulan gajian `Y-m` (unik). Cut-off 25 → periode 2026-11 = 26 Okt – 25 Nov; cut-off kosong = 1 bulan kalender (`PengaturanPayroll::rentang()`). Cut-off dibatasi 1–28.
 - **Rumus** di `App\Services\HitungPayroll::hitung()` (fungsi murni, integer rupiah):
   - hari hadir = absensi `hadir` + `telat`; komponen `per_hari_hadir` = nominal × hari hadir.
+  - **alpha** (`User::jumlahAlpha()`, dipakai payroll & rekap) = baris `alpha` + hari kerja yang sudah lewat (sebelum hari ini, sejak `tanggal_masuk`) yang **tidak punya catatan absensi sama sekali**. Potongan tetap benar walau cron `absensi:alpha` tidak jalan. Konsekuensinya: payroll draft yang di-generate di tengah periode hanya memotong hari yang sudah lewat, jadi generate ulang setelah periode selesai. Cabang tanpa pengaturan absensi → hanya baris alpha yang dihitung.
   - upah lembur: upah sebulan = gaji pokok + tunjangan jabatan + tunjangan **tetap** (tunjangan harian tidak ikut); per lembur: jam ke-1 × 1,5, sisanya × 2, proporsional per menit, dibulatkan per lembur. Hanya lembur `disetujui`. Belum membedakan lembur hari libur (×2/×3/×4) dan aturan 75% upah.
   - potongan telat = total menit × tarif; potongan alpha = jumlah alpha × tarif. Gaji bersih bisa negatif (tidak di-clamp) — cek manual kalau terjadi.
 - **Generate**: pegawai aktif selain Super Admin dengan `tanggal_masuk` ≤ akhir periode. Semua angka + identitas (nama, NIK, jabatan, cabang, rekening) disalin ke `payroll_detail` (+ `rincian` JSON per komponen). Generate ulang (draft) menghapus & menghitung ulang detail.
