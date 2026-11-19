@@ -45,6 +45,10 @@ class CabangController extends Controller
 
     public function destroy(Cabang $cabang): JsonResponse
     {
+        if ($cabang->pegawai()->exists()) {
+            return response()->json(['message' => 'Cabang tidak bisa dihapus karena masih dipakai pegawai.'], 422);
+        }
+
         $cabang->delete();
 
         return response()->json(['message' => 'Cabang berhasil dihapus.']);

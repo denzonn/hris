@@ -39,6 +39,11 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => ['otoritas_id' => $id]);
     }
 
+    public function nonaktif(): static
+    {
+        return $this->state(fn (array $attributes) => ['aktif' => false]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

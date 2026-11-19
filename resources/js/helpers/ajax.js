@@ -7,6 +7,9 @@ window.ajaxRequest = function ({
     error = null,
     complete = null,
     dataType = "json",
+    // FormData (upload file): kirim processData: false, contentType: false
+    processData,
+    contentType,
 }) {
     if (typeof before === "function") {
         before();
@@ -17,6 +20,8 @@ window.ajaxRequest = function ({
         type,
         data,
         dataType,
+        processData,
+        contentType,
 
         success(res) {
             if (typeof success === "function") {

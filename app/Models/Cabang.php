@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cabang extends Model
 {
@@ -17,5 +18,10 @@ class Cabang extends Model
             'longitude' => 'decimal:7',
             'radius_meter' => 'integer',
         ];
+    }
+
+    public function pegawai(): HasMany
+    {
+        return $this->hasMany(User::class);
     }
 }

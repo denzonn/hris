@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JobdeskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +41,13 @@ Route::middleware('auth')->group(function () {
         Route::post('jobdesk', [JobdeskController::class, 'store'])->name('jobdesk.store');
         Route::put('jobdesk/{jobdesk}', [JobdeskController::class, 'update'])->name('jobdesk.update');
         Route::delete('jobdesk/{jobdesk}', [JobdeskController::class, 'destroy'])->name('jobdesk.destroy');
+
+        // Pegawai: tidak ada hard delete, hanya toggle aktif
+        Route::get('user', [UserController::class, 'index'])->name('user');
+        Route::get('user/data', [UserController::class, 'data'])->name('user.data');
+        Route::post('user', [UserController::class, 'store'])->name('user.store');
+        Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
+        Route::patch('user/{user}/aktif', [UserController::class, 'toggleAktif'])->name('user.aktif');
     });
 });
 

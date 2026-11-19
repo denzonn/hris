@@ -29,4 +29,9 @@ class Jabatan extends Model
     {
         return $this->hasMany(Jobdesk::class);
     }
+
+    public function pegawai(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }

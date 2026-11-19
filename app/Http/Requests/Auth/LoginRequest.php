@@ -50,6 +50,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (! Auth::user()->aktif) {
+            Auth::guard('web')->logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda sudah dinonaktifkan. Silakan hubungi HR / Admin.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

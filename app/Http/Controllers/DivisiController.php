@@ -47,6 +47,10 @@ class DivisiController extends Controller
             return response()->json(['message' => 'Divisi tidak bisa dihapus karena masih memiliki jabatan.'], 422);
         }
 
+        if ($divisi->pegawai()->exists()) {
+            return response()->json(['message' => 'Divisi tidak bisa dihapus karena masih dipakai pegawai.'], 422);
+        }
+
         $divisi->delete();
 
         return response()->json(['message' => 'Divisi berhasil dihapus.']);

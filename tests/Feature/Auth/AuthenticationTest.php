@@ -31,6 +31,17 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('pegawai nonaktif tidak bisa login', function () {
+    $user = User::factory()->nonaktif()->create();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertSessionHasErrors(['email' => 'Akun Anda sudah dinonaktifkan. Silakan hubungi HR / Admin.']);
+
+    $this->assertGuest();
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

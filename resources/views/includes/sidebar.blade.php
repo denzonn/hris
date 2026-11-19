@@ -103,7 +103,6 @@
                         Jobdesk
 
                     </a>
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('user') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -114,6 +113,7 @@
                         User / Pegawai
 
                     </a>
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('product') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -349,7 +349,6 @@
                         Jobdesk
 
                     </a>
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('user') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -360,7 +359,6 @@
                         User / Pegawai
 
                     </a>
---}}
 
                 </div>
 
