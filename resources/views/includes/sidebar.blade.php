@@ -1082,14 +1082,24 @@
 --}}
         @endif
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
-        @if (auth()->user()->otoritas_id != 1)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Profile
+                    Akun
                 </p>
 
                 <div class="space-y-1">
+
+                    @if (auth()->user()->otoritas_id != 1)
+                        <a href="{{ route('slip_gaji') }}"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                    {{ request()->routeIs('slip_gaji*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                            <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i>
+
+                            Slip Gaji
+
+                        </a>
+                    @endif
 
                     <a href="{{ route('profile') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -1097,15 +1107,13 @@
 
                         <i class="fa-solid fa-user w-5 text-center"></i>
 
-                        Profile
+                        Profil
 
                     </a>
 
                 </div>
 
             </div>
-        @endif
---}}
 
     </div>
 

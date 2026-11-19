@@ -15,7 +15,9 @@ use App\Http\Controllers\LemburController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PengaturanAbsensiController;
 use App\Http\Controllers\PengaturanPayrollController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapAbsensiController;
+use App\Http\Controllers\SlipGajiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -108,6 +110,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
         Route::get('payroll/{payroll}/slip/{detail}', [PayrollController::class, 'slip'])->name('payroll.slip');
     });
+
+    // Akun sendiri (semua otoritas)
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('profile/password', [ProfileController::class, 'password'])->name('profile.password');
+    Route::get('slip_gaji', [SlipGajiController::class, 'index'])->name('slip_gaji');
+    Route::get('slip_gaji/data', [SlipGajiController::class, 'data'])->name('slip_gaji.data');
+    Route::get('slip_gaji/{detail}', [SlipGajiController::class, 'show'])->name('slip_gaji.show');
 
     // Absen mandiri: semua otoritas, hanya untuk diri sendiri
     Route::get('absen', [AbsenController::class, 'index'])->name('absen');

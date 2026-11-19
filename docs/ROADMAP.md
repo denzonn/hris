@@ -12,7 +12,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 2 – Pengaturan Absensi
 - [x] Fase 3 – Absensi
 - [x] Fase 4 – Payroll
-- [ ] Fase 5 – Dashboard & Portal Karyawan
+- [x] Fase 5 – Dashboard & Portal Karyawan
 - [ ] Fase 6 – Rekrutmen
 - [ ] Fase 7 – Kendaraan / Booking
 - [ ] Fase 8 – Hardening & Deploy
@@ -204,6 +204,16 @@ Catatan pelaksanaan Fase 4:
 - **Admin/HR:** total karyawan aktif, hadir / telat / izin / alpha hari ini, pengajuan pending, kontrak yang akan habis 30 hari lagi.
 - **Karyawan (otoritas 3):** tombol absen masuk/pulang, riwayat absensi sendiri, ajukan izin/cuti + sisa cuti, slip gaji sendiri, ganti password.
 - Sidebar dipisah per otoritas (pola `@if otoritas_id` yang sudah ada).
+
+Catatan pelaksanaan Fase 5 ✅ Selesai:
+
+- `DashboardController` memilih view: otoritas 3 → `pages/dashboard/karyawan`, lainnya → `pages/dashboard/admin` (view lama `dashboard.blade.php` dihapus).
+- Admin/HR: kartu karyawan aktif (tanpa Super Admin), hadir / telat / izin+sakit+cuti / alpha / belum absen hari ini (belum absen = aktif − baris absensi hari ini; di hari libur angka ini tetap terisi), pengajuan izin & lembur pending, tabel kontrak non-tetap yang habis ≤ 30 hari (termasuk yang sudah lewat tapi masih aktif, maks 10). HR yang punya cabang dapat tombol "Absen Saya".
+- Karyawan: absen hari ini + tombol ke `/absen` (absen tetap di halaman itu, tidak diduplikasi), rekap bulan berjalan, sisa cuti, jumlah pengajuan pending, slip final terakhir.
+- `slip_gaji` (semua otoritas): daftar & slip milik sendiri, **hanya payroll final** (draft → 404, milik orang lain → 403). Memakai view slip yang sama dengan HR.
+- `profile` (semua otoritas): data akun read-only + ganti password (`current_password`, min 8, konfirmasi, harus beda dari yang lama).
+- Sidebar: section "Akun" untuk semua (Slip Gaji untuk selain Super Admin, Profil). Menu Jobdesk untuk karyawan masih nonaktif (route jobdesk khusus HR/Admin).
+- Paksa ganti password default → tetap di Fase 8.
 
 ---
 
