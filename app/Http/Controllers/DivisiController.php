@@ -43,6 +43,10 @@ class DivisiController extends Controller
 
     public function destroy(Divisi $divisi): JsonResponse
     {
+        if ($divisi->jabatan()->exists()) {
+            return response()->json(['message' => 'Divisi tidak bisa dihapus karena masih memiliki jabatan.'], 422);
+        }
+
         $divisi->delete();
 
         return response()->json(['message' => 'Divisi berhasil dihapus.']);

@@ -83,7 +83,6 @@
                         Divisi
 
                     </a>
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jabatan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -94,6 +93,7 @@
                         Jabatan
 
                     </a>
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jobdesk') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -329,7 +329,6 @@
                         Divisi
 
                     </a>
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jabatan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -340,6 +339,7 @@
                         Jabatan
 
                     </a>
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
 
                     <a href="{{ route('jobdesk') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
