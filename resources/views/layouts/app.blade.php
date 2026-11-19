@@ -93,7 +93,7 @@
                     <div>
 
                         <h5 class="text-sm font-semibold text-slate-700">
-                            Base Project
+                            HRIS Acas Variasi
                         </h5>
 
                         <p class="text-xs text-slate-400">
@@ -105,7 +105,7 @@
                     <div class="text-right">
 
                         <p class="text-sm text-slate-500">
-                            Base Project
+                            HRIS
                         </p>
 
                         <p class="text-xs text-slate-400">

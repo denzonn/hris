@@ -24,7 +24,7 @@
 
             <div class="flex gap-2">
                 <button type="button" id="btnRefresh"
-                    class="h-10 w-10 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
+                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
                     <i class="fa-solid fa-rotate"></i>
                 </button>
                 <button type="button" onclick="tambahKomponen()"

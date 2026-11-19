@@ -8,7 +8,7 @@
     <div class="rounded-2xl border border-slate-200 bg-white">
 
         <div class="flex flex-col gap-3 border-b border-slate-100 p-5 xl:flex-row xl:items-center xl:justify-between">
-            <div class="grid w-full gap-3 md:grid-cols-4">
+            <div class="grid w-full min-w-0 gap-3 md:grid-cols-4">
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="search" placeholder="Cari nama / NIK..."
@@ -28,9 +28,9 @@
                 </x-select>
             </div>
 
-            <div class="flex gap-2">
+            <div class="flex shrink-0 gap-2">
                 <button type="button" id="btnRefresh"
-                    class="h-10 w-10 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
+                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
                     <i class="fa-solid fa-rotate"></i>
                 </button>
                 <button type="button" id="btnExport"
