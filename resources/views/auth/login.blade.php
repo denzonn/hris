@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.landing')
 
 @section('title', 'Login - Acas HRIS')
 

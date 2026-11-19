@@ -39,3 +39,13 @@ test('users can logout', function () {
     $this->assertGuest();
     $response->assertRedirect('/');
 });
+
+test('dashboard can be rendered for every otoritas', function (int $otoritas) {
+    $user = User::factory()->otoritas($otoritas)->create();
+
+    $this->actingAs($user)->get('/dashboard')->assertOk()->assertSee('Dashboard');
+})->with([1, 2, 3]);
+
+test('guests are redirected from dashboard to login', function () {
+    $this->get('/dashboard')->assertRedirect('/login');
+});
