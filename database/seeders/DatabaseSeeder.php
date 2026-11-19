@@ -8,6 +8,7 @@ use App\Models\HariLibur;
 use App\Models\Jabatan;
 use App\Models\Jobdesk;
 use App\Models\KomponenGaji;
+use App\Models\Lowongan;
 use App\Models\PengaturanPayroll;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -75,6 +76,14 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
+
+        Lowongan::updateOrCreate(['judul' => 'Teknisi Audio & Variasi Mobil'], [
+            'divisi_id' => $jabatan['Teknisi']->divisi_id,
+            'jabatan_id' => $jabatan['Teknisi']->id,
+            'deskripsi' => "Memasang audio, lampu, dan aksesoris variasi mobil.\nMerawat dan mengecek hasil pemasangan.",
+            'kualifikasi' => "Pendidikan minimal SMK Otomotif/Elektro.\nTeliti dan rapi.\nPengalaman di bengkel variasi menjadi nilai plus.",
+            'aktif' => true,
+        ]);
 
         Jobdesk::firstOrCreate(['jabatan_id' => $jabatan['Teknisi']->id, 'deskripsi' => 'Memasang dan merawat variasi kendaraan sesuai order.']);
         Jobdesk::firstOrCreate(['jabatan_id' => $jabatan['Kasir']->id, 'deskripsi' => 'Menerima pembayaran dan membuat laporan kas harian.']);

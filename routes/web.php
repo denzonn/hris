@@ -10,9 +10,12 @@ use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\IzinKaryawanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JobdeskController;
+use App\Http\Controllers\KarirController;
 use App\Http\Controllers\KomponenGajiController;
 use App\Http\Controllers\LemburController;
+use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PelamarController;
 use App\Http\Controllers\PengaturanAbsensiController;
 use App\Http\Controllers\PengaturanPayrollController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +27,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+// Karir publik (tanpa login)
+Route::get('karir', [KarirController::class, 'index'])->name('karir');
+Route::get('karir/{lowongan}', [KarirController::class, 'show'])->name('karir.show');
+Route::post('karir/{lowongan}', [KarirController::class, 'store'])->middleware('throttle:5,1')->name('karir.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -99,6 +107,19 @@ Route::middleware('auth')->group(function () {
 
         Route::get('pengaturan_payroll', [PengaturanPayrollController::class, 'index'])->name('pengaturan_payroll');
         Route::put('pengaturan_payroll', [PengaturanPayrollController::class, 'update'])->name('pengaturan_payroll.update');
+
+        Route::get('lowongan', [LowonganController::class, 'index'])->name('lowongan');
+        Route::get('lowongan/data', [LowonganController::class, 'data'])->name('lowongan.data');
+        Route::post('lowongan', [LowonganController::class, 'store'])->name('lowongan.store');
+        Route::put('lowongan/{lowongan}', [LowonganController::class, 'update'])->name('lowongan.update');
+        Route::delete('lowongan/{lowongan}', [LowonganController::class, 'destroy'])->name('lowongan.destroy');
+
+        // Pelamar dibuat dari halaman karir publik, di sini hanya diproses
+        Route::get('pelamar', [PelamarController::class, 'index'])->name('pelamar');
+        Route::get('pelamar/data', [PelamarController::class, 'data'])->name('pelamar.data');
+        Route::patch('pelamar/{pelamar}/status', [PelamarController::class, 'status'])->name('pelamar.status');
+        Route::get('pelamar/{pelamar}/cv', [PelamarController::class, 'cv'])->name('pelamar.cv');
+        Route::delete('pelamar/{pelamar}', [PelamarController::class, 'destroy'])->name('pelamar.destroy');
 
         Route::get('payroll', [PayrollController::class, 'index'])->name('payroll');
         Route::get('payroll/data', [PayrollController::class, 'data'])->name('payroll.data');

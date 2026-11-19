@@ -7,6 +7,7 @@ use App\Models\Cabang;
 use App\Models\Divisi;
 use App\Models\Jabatan;
 use App\Models\Otoritas;
+use App\Models\Pelamar;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,6 +26,9 @@ class UserController extends Controller
             'otoritas' => Otoritas::when($request->user()->otoritas_id !== 1, fn ($q) => $q->where('id', '!=', 1))
                 ->orderBy('id')->get(['id', 'nama']),
             'statusPtkp' => UserRequest::STATUS_PTKP,
+            // ?pelamar={id} → form tambah langsung terisi dari data pelamar
+            'pelamar' => Pelamar::with('lowongan:id,divisi_id,jabatan_id')->where('status', 'diterima')->whereNull('user_id')
+                ->find($request->integer('pelamar')),
         ]);
     }
 
@@ -49,20 +53,24 @@ class UserController extends Controller
 
     public function store(UserRequest $request): JsonResponse
     {
-        $data = $request->safe()->except('foto');
+        $data = $request->safe()->except(['foto', 'pelamar_id']);
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('pegawai', 'public');
         }
 
-        User::create($data);
+        $user = User::create($data);
+
+        if ($request->validated('pelamar_id')) {
+            Pelamar::whereKey($request->validated('pelamar_id'))->update(['user_id' => $user->id]);
+        }
 
         return response()->json(['message' => 'Pegawai berhasil ditambahkan.']);
     }
 
     public function update(UserRequest $request, User $user): JsonResponse
     {
-        $data = $request->safe()->except(['foto', 'password']);
+        $data = $request->safe()->except(['foto', 'password', 'pelamar_id']);
 
         if ($request->filled('password')) {
             $data['password'] = $request->validated('password');

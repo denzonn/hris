@@ -13,7 +13,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 3 – Absensi
 - [x] Fase 4 – Payroll
 - [x] Fase 5 – Dashboard & Portal Karyawan
-- [ ] Fase 6 – Rekrutmen
+- [x] Fase 6 – Rekrutmen
 - [ ] Fase 7 – Kendaraan / Booking
 - [ ] Fase 8 – Hardening & Deploy
 
@@ -223,6 +223,16 @@ Catatan pelaksanaan Fase 5 ✅ Selesai:
 2. Landing page publik (tanpa login, pakai `layouts/landing.blade.php`): daftar lowongan + form lamaran (CV upload, validasi `mimes:pdf|max:2048`).
 3. Pelamar: daftar per lowongan, status (baru/interview/diterima/ditolak).
 4. Pelamar diterima → tombol "Jadikan Pegawai" (prefill form pegawai).
+
+Catatan pelaksanaan Fase 6 ✅ Selesai:
+
+- Route admin (otoritas 1 & 2): `lowongan` (CRUD), `pelamar` (data, `PATCH /pelamar/{id}/status` + catatan internal, `GET /pelamar/{id}/cv`, hapus). Sidebar "Rekrutmen" aktif untuk Admin & HR. Menu "Pengaturan Landing Page" lama **tidak dibuat** (halaman karir cukup statis); tambahkan bila perlu ubah teks/banner tanpa deploy.
+- Publik tanpa login: `GET /karir`, `GET /karir/{lowongan}`, `POST /karir/{lowongan}` (throttle 5/menit per IP). Tampil hanya lowongan `aktif` dan `tanggal_tutup` kosong / ≥ hari ini (`Lowongan::dibuka()`); selain itu 404. Link "Lihat lowongan" ada di halaman login. `/` tetap redirect ke login.
+- Lamaran: nama, email (unik per lowongan), no HP, pendidikan terakhir, pesan, CV PDF ≤ 2 MB. **CV disimpan di disk `local` (private)**, hanya bisa dibuka HR/Admin; path CV tidak ikut di JSON.
+- Lowongan yang sudah punya pelamar tidak bisa dihapus (nonaktifkan). Hapus pelamar ikut menghapus file CV.
+- Jadikan Pegawai: tombol muncul untuk pelamar `diterima` yang belum jadi pegawai → `/user?pelamar={id}` membuka form tambah pegawai terisi (nama, email, no HP, divisi & jabatan dari lowongan, tanggal masuk hari ini). `pelamar_id` dikirim hidden dan divalidasi (`diterima` & belum tertaut); setelah simpan `pelamar.user_id` terisi. Pelamar yang sudah jadi pegawai tidak bisa dihapus/diubah status selain `diterima`.
+- Belum ada: notifikasi email ke pelamar, captcha (andalkan throttle dulu).
+- Seeder: 1 lowongan contoh (Teknisi Audio & Variasi Mobil).
 
 ---
 

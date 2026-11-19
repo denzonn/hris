@@ -401,6 +401,10 @@
 
                     </div>
 
+                    <p class="mt-6 text-center text-sm text-slate-500">
+                        Mencari kerja? <a href="{{ route('karir') }}" class="font-semibold text-primary hover:underline">Lihat lowongan</a>
+                    </p>
+
                     <div class="mt-8 text-center">
 
                         <p class="text-sm text-slate-500">

@@ -254,39 +254,31 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Rekruitmen
+                    Rekrutmen
                 </p>
 
                 <div class="space-y-1">
-                    <a href="{{ route('rekruitmen.lowongan') }}"
+
+                    <a href="{{ route('lowongan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.lowongan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('lowongan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-briefcase w-5 text-center"></i>
 
                         Lowongan Kerja
 
                     </a>
-                    <a href="{{ route('rekruitmen.pelamar') }}"
+
+                    <a href="{{ route('pelamar') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.pelamar*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('pelamar*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-users w-5 text-center"></i>
 
                         Data Pelamar
-
-                    </a>
-                    <a href="{{ route('rekruitmen.landing-page') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.landing-page*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
-
-                        <i class="fa-solid fa-sliders w-5 text-center"></i>
-
-                        Pengaturan Landing Page
 
                     </a>
 
@@ -294,6 +286,7 @@
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -529,46 +522,38 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Rekruitmen
+                    Rekrutmen
                 </p>
 
                 <div class="space-y-1">
-                    <a href="{{ route('rekruitmen.lowongan') }}"
+
+                    <a href="{{ route('lowongan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.lowongan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('lowongan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-briefcase w-5 text-center"></i>
 
                         Lowongan Kerja
 
                     </a>
-                    <a href="{{ route('rekruitmen.pelamar') }}"
+
+                    <a href="{{ route('pelamar') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.pelamar*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('pelamar*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-users w-5 text-center"></i>
 
                         Data Pelamar
 
                     </a>
-                    <a href="{{ route('rekruitmen.landing-page') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekruitmen.landing-page*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
-
-                        <i class="fa-solid fa-sliders w-5 text-center"></i>
-
-                        Pengaturan Landing Page
-
-                    </a>
 
                 </div>
 
             </div>
---}}
+
         @elseif (auth()->user()->otoritas_id == 3)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard

@@ -77,6 +77,7 @@
 
             <form id="formUser" class="space-y-6 p-6" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="pelamar_id" id="pelamar_id">
                 <div>
                     <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Akun</p>
                     <div class="grid gap-4 md:grid-cols-2">
@@ -255,6 +256,7 @@
             $('#formUser')[0].reset();
             $('#formUser [data-error]').addClass('hidden').text('');
             $('#previewFoto').addClass('hidden').attr('src', '');
+            $('#pelamar_id').val(''); // hidden input tidak ikut di-reset form.reset()
             renderJabatan('');
         }
 
@@ -309,6 +311,20 @@
 
         $(function() {
             loadData();
+
+            @if ($pelamar)
+                // dari tombol "Jadikan Pegawai" di data pelamar
+                tambahUser();
+                $('#modalTitle').text('Tambah Pegawai dari Pelamar');
+                $('#pelamar_id').val(@json($pelamar->id));
+                $('#name').val(@json($pelamar->nama));
+                $('#email').val(@json($pelamar->email));
+                $('#no_hp').val(@json($pelamar->no_hp));
+                $('#tanggal_masuk').val(@json(today()->toDateString()));
+                $('#divisi_id').val(@json($pelamar->lowongan?->divisi_id));
+                renderJabatan(@json($pelamar->lowongan?->divisi_id), @json($pelamar->lowongan?->jabatan_id));
+            @endif
+
             debounceSearch('#search', () => loadData());
             refreshData('#btnRefresh', '#search', () => loadData());
             $('#filter_cabang, #filter_divisi, #filter_aktif').on('change', () => loadData());

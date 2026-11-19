@@ -52,6 +52,8 @@ class UserRequest extends FormRequest
             'status_ptkp' => ['nullable', Rule::in(self::STATUS_PTKP)],
             'jatah_cuti' => ['required', 'integer', 'min:0', 'max:255'],
             'foto' => ['nullable', 'image', 'max:2048'],
+            // dari tombol "Jadikan Pegawai" di data pelamar
+            'pelamar_id' => ['nullable', 'integer', Rule::exists('pelamar', 'id')->where('status', 'diterima')->whereNull('user_id')],
         ];
     }
 
