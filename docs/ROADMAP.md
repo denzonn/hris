@@ -7,7 +7,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 
 ---
 
-## Fase 0 – Perbaikan Base Project (WAJIB sebelum fitur)
+## Fase 0 – Perbaikan Base Project (WAJIB sebelum fitur) ✅ Selesai
 
 Kondisi base saat ini yang akan bikin error:
 
@@ -35,6 +35,17 @@ Langkah:
    - Modal tambah/edit pakai `showModal()`, hapus pakai helper `hapus.js`
 
 **Selesai jika:** login → dashboard tanpa error, `php artisan test` hijau.
+
+Catatan pelaksanaan Fase 0:
+
+- Langkah 1–7 selesai. Modul **Cabang** (step 1.1 Fase 1) sudah dibuat sebagai contoh pola CRUD → di Fase 1 tinggal lanjut dari 1.2.
+- Data otoritas di-seed via `OtoritasSeeder`; `tests/TestCase.php` menjalankannya otomatis tiap test (FK `users.otoritas_id`).
+- Test pakai SQLite in-memory (`phpunit.xml`) → butuh ekstensi `pdo_sqlite` aktif di PHP.
+- Middleware: `App\Http\Middleware\CekOtoritas`, alias `otoritas`.
+- `auth/login.blade.php` sebelumnya extends `layouts.auth` (tidak ada) → diganti ke `layouts.landing`.
+- Component `<x-input>` sebelumnya file kosong → diisi (label + input + `<p data-error>` untuk pesan validasi 422). `<x-select>` masih kosong, isi saat pertama dibutuhkan.
+- Script halaman (`@push('addon-script')`) harus memanggil helper di dalam `$(function () { ... })` karena `app.js` (module Vite) dieksekusi setelah script inline.
+- `public/images/logo.png` belum ada (dipakai sidebar & favicon).
 
 ---
 
