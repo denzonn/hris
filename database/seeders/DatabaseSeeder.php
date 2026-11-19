@@ -24,9 +24,12 @@ class DatabaseSeeder extends Seeder
             'password' => 'password',
             'otoritas_id' => 1,
             'email_verified_at' => now(),
+            'wajib_ganti_password' => app()->isProduction(), // password default "password" wajib diganti di server
         ]);
 
-        $this->seedContoh();
+        if (! app()->isProduction()) {
+            $this->seedContoh();
+        }
     }
 
     /** Data contoh master supaya halaman tidak kosong saat dicoba. */

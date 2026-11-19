@@ -5,6 +5,7 @@ HRIS (absensi, payroll, master pegawai, rekrutmen) untuk **Acas Variasi**. Bahas
 ## Dokumen
 
 - [docs/ROADMAP.md](docs/ROADMAP.md) — fase & step pembuatan. Kerjakan berurutan, update checklist saat selesai.
+- [docs/DEPLOY.md](docs/DEPLOY.md) — checklist server production (env, cron, backup, update).
 - `docs/` — semua dokumen project (spesifikasi modul, rumus payroll, dll) disimpan di sini.
 
 ## Stack

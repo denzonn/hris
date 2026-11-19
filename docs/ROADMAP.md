@@ -14,7 +14,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 4 – Payroll
 - [x] Fase 5 – Dashboard & Portal Karyawan
 - [x] Fase 6 – Rekrutmen
-- [ ] Fase 8 – Hardening & Deploy
+- [x] Fase 8 – Hardening & Deploy
 
 > Fase 7 (Kendaraan / Booking) dihapus dari scope — modul operasional bengkel, bukan HR. Menu sidebar terkait sudah dibuang.
 
@@ -237,7 +237,7 @@ Catatan pelaksanaan Fase 6 ✅ Selesai:
 
 ---
 
-## Fase 8 – Hardening & Deploy
+## Fase 8 – Hardening & Deploy ✅ Selesai
 
 - Rate limit login (sudah ada di `LoginRequest`), paksa ganti password default.
 - Upload foto/lampiran ke `storage` (disk `public` / private untuk dokumen sensitif) + `php artisan storage:link`.
@@ -245,6 +245,16 @@ Catatan pelaksanaan Fase 6 ✅ Selesai:
 - Backup database harian.
 - Cron scheduler + `queue:work` (supervisor) di server.
 - `php artisan optimize`, `APP_DEBUG=false`, HTTPS (wajib — geolocation & kamera tidak jalan tanpa HTTPS di HP).
+
+Catatan pelaksanaan Fase 8:
+
+- Panduan server lengkap: [docs/DEPLOY.md](DEPLOY.md) (env production, pemasangan, cron, backup, update, keamanan).
+- **Paksa ganti password**: kolom `users.wajib_ganti_password`. Bernilai `true` saat HR/Admin membuat pegawai atau me-reset password orang lain (reset akun sendiri tidak), dan untuk akun Super Admin hasil seeder di production. Middleware `WajibGantiPassword` (grup `web`) mengarahkan ke `/profile` (JSON → 403) sampai password diganti. Yang dikecualikan: `profile`, `profile.password`, `logout`.
+- **Kompres foto absen** di browser (`kompresFoto()` di `pages/absen`): JPEG maks 1280 px, kualitas 0,7. Kalau gambar tidak terbaca browser, file asli dikirim dan server tetap memvalidasi.
+- **Backup**: `php artisan backup:database {--keep=14}` menjalankan mysqldump (`--no-defaults --single-transaction`, password lewat env `MYSQL_PWD`, bukan argumen) dan mengalirkan hasilnya langsung ke `storage/app/backup/hris-*.sql.gz`. Jadwal tiap hari 01:00. Binary diatur di `DB_DUMP_BINARY`. Backup gagal → file dihapus dan command exit gagal. Backup masih lokal di server yang sama; salin ke luar server (lihat DEPLOY.md).
+- **Production**: `URL::forceScheme('https')` di `AppServiceProvider`, dan seeder tidak mengisi data contoh. `SESSION_SECURE_COOKIE=true` diatur di `.env`.
+- `queue:work`/supervisor tidak dipasang karena belum ada job antrian.
+- Belum dibuat: memindahkan foto absensi/pegawai ke disk private, notifikasi email.
 
 ---
 

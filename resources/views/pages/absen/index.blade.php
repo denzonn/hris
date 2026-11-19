@@ -130,11 +130,29 @@
             Swal.fire({ icon: 'error', title: 'Gagal', text });
         }
 
-        function kirimAbsen(url) {
+        // Perkecil foto kamera HP (bisa 3–8 MB) jadi JPEG maks 1280px supaya upload cepat & storage hemat.
+        function kompresFoto(file, maks = 1280, kualitas = 0.7) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const skala = Math.min(1, maks / Math.max(img.width, img.height));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.round(img.width * skala);
+                    canvas.height = Math.round(img.height * skala);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(img.src);
+                    canvas.toBlob((blob) => resolve(blob ?? file), 'image/jpeg', kualitas);
+                };
+                img.onerror = () => resolve(file); // format tak terbaca browser → kirim asli, server tetap memvalidasi
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        async function kirimAbsen(url) {
             const fd = new FormData();
             fd.append('_token', $('meta[name="csrf-token"]').attr('content'));
             const foto = $('#foto')[0]?.files[0];
-            if (foto) fd.append('foto', foto);
+            if (foto) fd.append('foto', await kompresFoto(foto), 'foto.jpg');
 
             const kirim = () => ajaxRequest({
                 url, type: 'POST', data: fd, processData: false, contentType: false,
