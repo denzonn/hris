@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 // Server: cron `* * * * * php artisan schedule:run`
 Schedule::command('absensi:alpha')->dailyAt('23:59');
+Schedule::command('backup:database')->dailyAt('01:00');

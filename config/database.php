@@ -60,6 +60,8 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            // dipakai `php artisan backup:database`; isi path lengkap bila mysqldump tidak ada di PATH
+            'dump_binary' => env('DB_DUMP_BINARY', 'mysqldump'),
         ],
 
         'mariadb' => [
