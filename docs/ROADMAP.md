@@ -11,7 +11,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 1 – Master Data
 - [x] Fase 2 – Pengaturan Absensi
 - [x] Fase 3 – Absensi
-- [ ] Fase 4 – Payroll
+- [x] Fase 4 – Payroll
 - [ ] Fase 5 – Dashboard & Portal Karyawan
 - [ ] Fase 6 – Rekrutmen
 - [ ] Fase 7 – Kendaraan / Booking
@@ -154,7 +154,7 @@ Catatan pelaksanaan Fase 3:
 
 ---
 
-## Fase 4 – Payroll
+## Fase 4 – Payroll ✅ Selesai
 
 | Step | Fitur | Isi |
 |------|-------|-----|
@@ -181,6 +181,21 @@ gaji_bersih = gaji_pokok
 - Uang: kolom `decimal(15,2)` / `bigInteger` rupiah, jangan `float`.
 
 **Test wajib (paling penting di seluruh project):** satu test per komponen rumus (lembur, telat, alpha, total) dengan angka yang dihitung manual.
+
+Catatan pelaksanaan Fase 4:
+
+- Route (otoritas 1 & 2): `komponen_gaji`, `gaji_pegawai` (nominal komponen per pegawai, `PUT /gaji_pegawai/{user}` = sync; nominal 0 = dilepas), `pengaturan_payroll` (1 baris global, `PengaturanPayroll::aktif()`), `payroll` (+ `/payroll/{id}`, `/generate`, `/final`, `/slip/{detail}`). Menu sidebar "Payroll" aktif untuk Admin & HR.
+- Tabel `komponen_gaji_user` = pivot `User::komponenGaji()` (withPivot `nominal`). Komponen yang masih dipakai pegawai tidak bisa dihapus (422).
+- **Periode**: `periode` = bulan gajian `Y-m` (unik). Cut-off 25 → periode 2026-11 = 26 Okt – 25 Nov; cut-off kosong = 1 bulan kalender (`PengaturanPayroll::rentang()`). Cut-off dibatasi 1–28.
+- **Rumus** di `App\Services\HitungPayroll::hitung()` (fungsi murni, integer rupiah):
+  - hari hadir = absensi `hadir` + `telat`; komponen `per_hari_hadir` = nominal × hari hadir.
+  - upah lembur: upah sebulan = gaji pokok + tunjangan jabatan + tunjangan **tetap** (tunjangan harian tidak ikut); per lembur: jam ke-1 × 1,5, sisanya × 2, proporsional per menit, dibulatkan per lembur. Hanya lembur `disetujui`. Belum membedakan lembur hari libur (×2/×3/×4) dan aturan 75% upah.
+  - potongan telat = total menit × tarif; potongan alpha = jumlah alpha × tarif. Gaji bersih bisa negatif (tidak di-clamp) — cek manual kalau terjadi.
+- **Generate**: pegawai aktif selain Super Admin dengan `tanggal_masuk` ≤ akhir periode. Semua angka + identitas (nama, NIK, jabatan, cabang, rekening) disalin ke `payroll_detail` (+ `rincian` JSON per komponen). Generate ulang (draft) menghapus & menghitung ulang detail.
+- **Final**: payroll final tidak bisa di-generate ulang/dihapus. `Payroll::tolakJikaTerkunci()` menolak (422) input/ubah/hapus absensi manual, lembur (tambah/ubah/hapus/setujui), dan pengajuan izin yang menyentuh tanggal di periode final; `absensi:alpha` melewati tanggal tersebut. Absen mandiri tidak dicek (periode biasanya difinalkan setelah lewat).
+- Slip: `payroll/{id}/slip/{detail}` halaman mandiri + `@media print` (Print → Save as PDF), tanda "DRAFT" bila belum final. Slip untuk karyawan sendiri (otoritas 3) → Fase 5.
+- BPJS & PPh21 (step 4.7) belum dibuat.
+- Seeder: pengaturan payroll (cut-off 25, telat Rp1.000/menit, alpha Rp100.000) + komponen Uang Makan (Rp25.000/hari) & Tunjangan Transport (Rp300.000) untuk 3 pegawai contoh.
 
 ---
 

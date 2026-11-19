@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Absensi;
+use App\Models\Payroll;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -17,6 +18,12 @@ class TandaiAlpha extends Command
     public function handle(): int
     {
         $tanggal = Carbon::parse($this->argument('tanggal') ?? today());
+
+        if (Payroll::terkunci($tanggal->toDateString())) {
+            $this->warn("Tanggal {$tanggal->toDateString()} masuk payroll final, dilewati.");
+
+            return self::SUCCESS;
+        }
         $hariKerja = []; // cache per cabang
         $jumlah = 0;
 

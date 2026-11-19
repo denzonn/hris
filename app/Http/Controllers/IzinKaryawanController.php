@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IzinKaryawanRequest;
 use App\Models\Absensi;
+use App\Models\Payroll;
 use App\Models\PengajuanIzin;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -126,6 +127,7 @@ class IzinKaryawanController extends Controller
     {
         $tanggal = $izin->tanggalEfektif();
         abort_if($tanggal === [], 422, 'Rentang tanggal tidak berisi hari kerja.');
+        Payroll::tolakJikaTerkunci(...$tanggal);
 
         $bentrok = PengajuanIzin::where('user_id', $izin->user_id)
             ->whereIn('status', ['pending', 'disetujui'])

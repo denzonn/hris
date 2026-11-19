@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AbsensiKaryawanRequest;
 use App\Models\Absensi;
 use App\Models\Cabang;
+use App\Models\Payroll;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class AbsensiKaryawanController extends Controller
 
     public function store(AbsensiKaryawanRequest $request): JsonResponse
     {
+        Payroll::tolakJikaTerkunci($request->validated('tanggal'));
         Absensi::create($this->siapkan($request));
 
         return response()->json(['message' => 'Absensi berhasil ditambahkan.']);
@@ -47,6 +49,7 @@ class AbsensiKaryawanController extends Controller
 
     public function update(AbsensiKaryawanRequest $request, Absensi $absensi): JsonResponse
     {
+        Payroll::tolakJikaTerkunci($absensi->tanggal->toDateString(), $request->validated('tanggal'));
         $absensi->update($this->siapkan($request));
 
         return response()->json(['message' => 'Absensi berhasil diperbarui.']);
@@ -54,6 +57,7 @@ class AbsensiKaryawanController extends Controller
 
     public function destroy(Absensi $absensi): JsonResponse
     {
+        Payroll::tolakJikaTerkunci($absensi->tanggal->toDateString());
         $absensi->delete();
 
         return response()->json(['message' => 'Absensi berhasil dihapus.']);

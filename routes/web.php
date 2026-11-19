@@ -5,12 +5,16 @@ use App\Http\Controllers\AbsensiKaryawanController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\GajiPegawaiController;
 use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\IzinKaryawanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JobdeskController;
+use App\Http\Controllers\KomponenGajiController;
 use App\Http\Controllers\LemburController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PengaturanAbsensiController;
+use App\Http\Controllers\PengaturanPayrollController;
 use App\Http\Controllers\RekapAbsensiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +83,30 @@ Route::middleware('auth')->group(function () {
         Route::get('rekap_absensi', [RekapAbsensiController::class, 'index'])->name('rekap_absensi');
         Route::get('rekap_absensi/data', [RekapAbsensiController::class, 'data'])->name('rekap_absensi.data');
         Route::get('rekap_absensi/export', [RekapAbsensiController::class, 'export'])->name('rekap_absensi.export');
+
+        Route::get('komponen_gaji', [KomponenGajiController::class, 'index'])->name('komponen_gaji');
+        Route::get('komponen_gaji/data', [KomponenGajiController::class, 'data'])->name('komponen_gaji.data');
+        Route::post('komponen_gaji', [KomponenGajiController::class, 'store'])->name('komponen_gaji.store');
+        Route::put('komponen_gaji/{komponen_gaji}', [KomponenGajiController::class, 'update'])->name('komponen_gaji.update');
+        Route::delete('komponen_gaji/{komponen_gaji}', [KomponenGajiController::class, 'destroy'])->name('komponen_gaji.destroy');
+
+        // Nominal komponen per pegawai: hanya simpan (sync), tanpa tambah/hapus
+        Route::get('gaji_pegawai', [GajiPegawaiController::class, 'index'])->name('gaji_pegawai');
+        Route::get('gaji_pegawai/data', [GajiPegawaiController::class, 'data'])->name('gaji_pegawai.data');
+        Route::put('gaji_pegawai/{user}', [GajiPegawaiController::class, 'update'])->name('gaji_pegawai.update');
+
+        Route::get('pengaturan_payroll', [PengaturanPayrollController::class, 'index'])->name('pengaturan_payroll');
+        Route::put('pengaturan_payroll', [PengaturanPayrollController::class, 'update'])->name('pengaturan_payroll.update');
+
+        Route::get('payroll', [PayrollController::class, 'index'])->name('payroll');
+        Route::get('payroll/data', [PayrollController::class, 'data'])->name('payroll.data');
+        Route::post('payroll', [PayrollController::class, 'store'])->name('payroll.store');
+        Route::get('payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
+        Route::get('payroll/{payroll}/data', [PayrollController::class, 'detail'])->name('payroll.detail');
+        Route::post('payroll/{payroll}/generate', [PayrollController::class, 'generate'])->name('payroll.generate');
+        Route::patch('payroll/{payroll}/final', [PayrollController::class, 'final'])->name('payroll.final');
+        Route::delete('payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
+        Route::get('payroll/{payroll}/slip/{detail}', [PayrollController::class, 'slip'])->name('payroll.slip');
     });
 
     // Absen mandiri: semua otoritas, hanya untuk diri sendiri

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LemburRequest;
 use App\Models\Lembur;
+use App\Models\Payroll;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class LemburController extends Controller
     public function store(LemburRequest $request): JsonResponse
     {
         $data = $request->validated();
+        Payroll::tolakJikaTerkunci($data['tanggal']);
 
         if ($this->isKaryawan($request)) {
             $data += ['user_id' => $request->user()->id, 'status' => 'pending'];
@@ -63,6 +65,7 @@ class LemburController extends Controller
     public function update(LemburRequest $request, Lembur $lembur): JsonResponse
     {
         $this->cekMilikPending($request, $lembur);
+        Payroll::tolakJikaTerkunci($lembur->tanggal->toDateString(), $request->validated('tanggal'));
 
         $lembur->update($request->validated());
 
@@ -72,6 +75,7 @@ class LemburController extends Controller
     public function destroy(Request $request, Lembur $lembur): JsonResponse
     {
         $this->cekMilikPending($request, $lembur);
+        Payroll::tolakJikaTerkunci($lembur->tanggal->toDateString());
 
         $lembur->delete();
 
@@ -81,6 +85,7 @@ class LemburController extends Controller
     public function status(Request $request, Lembur $lembur): JsonResponse
     {
         $data = $request->validate(['status' => ['required', Rule::in(['disetujui', 'ditolak'])]]);
+        Payroll::tolakJikaTerkunci($lembur->tanggal->toDateString());
 
         $lembur->update($data + ['disetujui_oleh' => $request->user()->id]);
 

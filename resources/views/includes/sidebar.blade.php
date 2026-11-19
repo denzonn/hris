@@ -202,14 +202,43 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Karyawan
+                    Payroll
                 </p>
 
                 <div class="space-y-1">
+
+                    <a href="{{ route('komponen_gaji') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('komponen_gaji*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-list-ul w-5 text-center"></i>
+
+                        Komponen Gaji
+
+                    </a>
+
+                    <a href="{{ route('gaji_pegawai') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('gaji_pegawai*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-money-check-dollar w-5 text-center"></i>
+
+                        Gaji Pegawai
+
+                    </a>
+
+                    <a href="{{ route('pengaturan_payroll') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('pengaturan_payroll*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-sliders w-5 text-center"></i>
+
+                        Pengaturan Payroll
+
+                    </a>
 
                     <a href="{{ route('payroll') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -218,12 +247,14 @@
                         <i class="fa-solid fa-wallet w-5 text-center"></i>
 
                         Payroll
-                        </p>
 
                     </a>
+
                 </div>
+
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -446,14 +477,43 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Karyawan
+                    Payroll
                 </p>
 
                 <div class="space-y-1">
+
+                    <a href="{{ route('komponen_gaji') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('komponen_gaji*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-list-ul w-5 text-center"></i>
+
+                        Komponen Gaji
+
+                    </a>
+
+                    <a href="{{ route('gaji_pegawai') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('gaji_pegawai*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-money-check-dollar w-5 text-center"></i>
+
+                        Gaji Pegawai
+
+                    </a>
+
+                    <a href="{{ route('pengaturan_payroll') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('pengaturan_payroll*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-sliders w-5 text-center"></i>
+
+                        Pengaturan Payroll
+
+                    </a>
 
                     <a href="{{ route('payroll') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -464,9 +524,12 @@
                         Payroll
 
                     </a>
+
                 </div>
+
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">

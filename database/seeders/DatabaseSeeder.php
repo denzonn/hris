@@ -7,6 +7,8 @@ use App\Models\Divisi;
 use App\Models\HariLibur;
 use App\Models\Jabatan;
 use App\Models\Jobdesk;
+use App\Models\KomponenGaji;
+use App\Models\PengaturanPayroll;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -53,6 +55,12 @@ class DatabaseSeeder extends Seeder
             HariLibur::updateOrCreate(['tanggal' => $tanggal], ['keterangan' => $keterangan]);
         }
 
+        PengaturanPayroll::aktif()->update(['tanggal_cutoff' => 25, 'potongan_per_menit_telat' => 1000, 'potongan_per_alpha' => 100000]);
+        $komponen = [
+            KomponenGaji::updateOrCreate(['nama' => 'Uang Makan'], ['tipe' => 'tunjangan', 'sifat' => 'per_hari_hadir']),
+            KomponenGaji::updateOrCreate(['nama' => 'Tunjangan Transport'], ['tipe' => 'tunjangan', 'sifat' => 'tetap']),
+        ];
+
         $jabatan = [];
         foreach ([
             'Operasional' => ['Kepala Bengkel' => 1500000, 'Teknisi' => 500000],
@@ -76,7 +84,7 @@ class DatabaseSeeder extends Seeder
             ['teknisi@hris.test', 'Budi Teknisi', 3, 'Teknisi', 'kontrak', 4000000],
             ['kasir@hris.test', 'Sari Kasir', 3, 'Kasir', 'magang', 2500000],
         ] as $i => [$email, $nama, $otoritas, $namaJabatan, $status, $gaji]) {
-            User::updateOrCreate(['email' => $email], [
+            $user = User::updateOrCreate(['email' => $email], [
                 'name' => $nama,
                 'password' => 'password',
                 'otoritas_id' => $otoritas,
@@ -91,6 +99,7 @@ class DatabaseSeeder extends Seeder
                 'gaji_pokok' => $gaji,
                 'status_ptkp' => 'TK/0',
             ]);
+            $user->komponenGaji()->sync([$komponen[0]->id => ['nominal' => 25000], $komponen[1]->id => ['nominal' => 300000]]);
         }
     }
 }

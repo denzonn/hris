@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -107,6 +108,11 @@ class User extends Authenticatable
     public function lembur(): HasMany
     {
         return $this->hasMany(Lembur::class);
+    }
+
+    public function komponenGaji(): BelongsToMany
+    {
+        return $this->belongsToMany(KomponenGaji::class, 'komponen_gaji_user')->withPivot('nominal')->withTimestamps();
     }
 
     /** Sisa cuti = jatah − hari cuti yang sudah tercatat di absensi tahun itu (dihitung, tidak disimpan). */
