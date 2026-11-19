@@ -74,6 +74,7 @@
 
                     </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
                     <a href="{{ route('divisi') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
                                 {{ request()->routeIs('divisi*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
@@ -123,11 +124,13 @@
                         Produk Booking
 
                     </a>
+--}}
 
                 </div>
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -291,6 +294,7 @@
                 </div>
 
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 2)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -308,6 +312,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -490,6 +495,7 @@
                 </div>
 
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 3)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -507,6 +513,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
@@ -620,6 +627,7 @@
                 </div>
 
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 4)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -637,6 +645,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
@@ -717,6 +726,7 @@
                     </a>
                 </div>
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 5)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -734,6 +744,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
@@ -794,6 +805,7 @@
                     </a>
                 </div>
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 6)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -811,6 +823,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
@@ -903,6 +916,7 @@
                     </a>
                 </div>
             </div>
+--}}
         @elseif (auth()->user()->otoritas_id == 7)
             <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                 Dashboard
@@ -920,6 +934,7 @@
 
             </a>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
@@ -1001,8 +1016,10 @@
                     </a>
                 </div>
             </div>
+--}}
         @endif
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
         @if (auth()->user()->otoritas_id != 1)
             <div class="mt-8">
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -1025,6 +1042,7 @@
 
             </div>
         @endif
+--}}
 
     </div>
 

@@ -154,11 +154,11 @@
             <div class="hidden md:block text-left">
 
                 <h4 class="text-sm font-semibold text-slate-700">
-                    Denson Patibang
+                    {{ auth()->user()->name }}
                 </h4>
 
                 <p class="text-xs text-slate-400">
-                    Superadmin
+                    {{ auth()->user()->otoritas?->nama }}
                 </p>
 
             </div>
