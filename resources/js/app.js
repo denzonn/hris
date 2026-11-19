@@ -409,18 +409,21 @@ window.formatBadgeStatus = function (status) {
     if (
         statusLower.includes("ditolak") ||
         statusLower.includes("batal") ||
+        statusLower === "alpha" ||
         statusLower === "reject"
     ) {
         badgeClass = "bg-red-600 text-white";
     } else if (
         statusLower === "diterima" ||
         statusLower === "disetujui" ||
+        statusLower === "hadir" ||
         statusLower === "selesai" ||
         statusLower === "approved"
     ) {
         badgeClass = "bg-emerald-600 text-white";
     } else if (
         statusLower.includes("wawancara") ||
+        statusLower === "telat" ||
         statusLower === "proses" ||
         statusLower === "pengecekan" ||
         statusLower === "pemasangan"
@@ -430,6 +433,7 @@ window.formatBadgeStatus = function (status) {
         statusLower === "ditinjau" ||
         statusLower === "lolos administrasi" ||
         statusLower === "baru" ||
+        ["izin", "sakit", "cuti", "libur"].includes(statusLower) ||
         statusLower === "pending"
     ) {
         badgeClass = "bg-blue-600 text-white";

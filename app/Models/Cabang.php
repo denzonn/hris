@@ -30,4 +30,14 @@ class Cabang extends Model
     {
         return $this->hasOne(PengaturanAbsensi::class);
     }
+
+    /** Jarak (meter) dari titik cabang ke koordinat, rumus haversine. */
+    public function jarakKe(float $lat, float $lng): float
+    {
+        $dLat = deg2rad($lat - $this->latitude);
+        $dLng = deg2rad($lng - $this->longitude);
+        $a = sin($dLat / 2) ** 2 + cos(deg2rad($this->latitude)) * cos(deg2rad($lat)) * sin($dLng / 2) ** 2;
+
+        return 6371000 * 2 * atan2(sqrt($a), sqrt(1 - $a));
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
@@ -65,6 +66,12 @@ Route::middleware('auth')->group(function () {
 
         Route::patch('lembur/{lembur}/status', [LemburController::class, 'status'])->name('lembur.status');
     });
+
+    // Absen mandiri: semua otoritas, hanya untuk diri sendiri
+    Route::get('absen', [AbsenController::class, 'index'])->name('absen');
+    Route::get('absen/data', [AbsenController::class, 'data'])->name('absen.data');
+    Route::post('absen/masuk', [AbsenController::class, 'masuk'])->name('absen.masuk');
+    Route::post('absen/pulang', [AbsenController::class, 'pulang'])->name('absen.pulang');
 
     // Lembur: semua otoritas; karyawan dibatasi ke datanya sendiri di controller
     Route::get('lembur', [LemburController::class, 'index'])->name('lembur');
