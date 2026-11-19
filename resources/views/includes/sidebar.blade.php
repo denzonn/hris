@@ -130,7 +130,6 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -139,9 +138,9 @@
 
                 <div class="space-y-1">
 
-                    <a href="{{ route('pengaturan') }}"
+                    <a href="{{ route('pengaturan_absensi') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('pengaturan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('pengaturan_absensi*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-gear w-5 text-center"></i>
 
@@ -149,9 +148,9 @@
 
                     </a>
 
-                    <a href="{{ route('libur') }}"
+                    <a href="{{ route('hari_libur') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('libur*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('hari_libur*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-calendar w-5 text-center"></i>
 
@@ -168,6 +167,19 @@
                         Perintah Lembur
 
                     </a>
+
+                </div>
+
+            </div>
+
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
+            <div class="mt-8">
+
+                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
+                    Absensi
+                </p>
+
+                <div class="space-y-1">
 
                     <a href="{{ route('absensi_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -364,7 +376,6 @@
 
             </div>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -373,9 +384,9 @@
 
                 <div class="space-y-1">
 
-                    <a href="{{ route('pengaturan') }}"
+                    <a href="{{ route('pengaturan_absensi') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('pengaturan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('pengaturan_absensi*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-gear w-5 text-center"></i>
 
@@ -383,9 +394,9 @@
 
                     </a>
 
-                    <a href="{{ route('libur') }}"
+                    <a href="{{ route('hari_libur') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('libur*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('hari_libur*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-calendar w-5 text-center"></i>
 
@@ -402,6 +413,19 @@
                         Perintah Lembur
 
                     </a>
+
+                </div>
+
+            </div>
+
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
+            <div class="mt-8">
+
+                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
+                    Absensi
+                </p>
+
+                <div class="space-y-1">
 
                     <a href="{{ route('absensi_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
@@ -513,8 +537,8 @@
 
             </a>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
+
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
                     Absensi
                 </p>
@@ -527,9 +551,21 @@
 
                         <i class="fa-solid fa-clock w-5 text-center"></i>
 
-                        Perintah Lembur
+                        Lembur
 
                     </a>
+
+                </div>
+
+            </div>
+
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
+            <div class="mt-8">
+                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
+                    Absensi
+                </p>
+
+                <div class="space-y-1">
 
                     <a href="{{ route('absensi_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition

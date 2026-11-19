@@ -9,7 +9,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 
 - [x] Fase 0 – Perbaikan Base Project
 - [x] Fase 1 – Master Data
-- [ ] Fase 2 – Pengaturan Absensi
+- [x] Fase 2 – Pengaturan Absensi
 - [ ] Fase 3 – Absensi
 - [ ] Fase 4 – Payroll
 - [ ] Fase 5 – Dashboard & Portal Karyawan
@@ -89,7 +89,7 @@ Catatan pelaksanaan Fase 1:
 
 ---
 
-## Fase 2 – Pengaturan Absensi
+## Fase 2 – Pengaturan Absensi ✅ Selesai
 
 | Step | Fitur | Tabel | Isi |
 |------|-------|-------|-----|
@@ -98,6 +98,16 @@ Catatan pelaksanaan Fase 1:
 | 2.3 | Perintah Lembur | `lembur` | user_id, tanggal, jam_mulai, jam_selesai, keterangan, status (pending/disetujui/ditolak), disetujui_oleh |
 
 Mulai dengan **1 jadwal per cabang**. Shift (pagi/malam/rotasi) baru ditambah kalau memang ada karyawan shift.
+
+Catatan pelaksanaan Fase 2:
+
+- Route: `pengaturan_absensi`, `hari_libur` (otoritas 1 & 2), `lembur` (semua otoritas). Menu sidebar Absensi aktif untuk Admin & HR (Pengaturan, Hari Libur, Perintah Lembur) dan Karyawan (Lembur).
+- **Pengaturan absensi**: tabel berisi 1 baris per cabang (`cabang_id` unique, cascade saat cabang dihapus). Halaman menampilkan semua cabang; tidak ada tambah/hapus, hanya `PUT /pengaturan_absensi/{cabang}` (upsert). Cabang tanpa pengaturan tampil "Belum diatur" → **Fase 3 harus menangani cabang tanpa pengaturan** (tolak absen / pakai default).
+- `hari_kerja` = array angka ISO (1 = Senin … 7 = Minggu), cocok dengan `Carbon::dayOfWeekIso`. Disimpan urut.
+- **Lembur**: HR/Admin membuat perintah → langsung `disetujui` (`disetujui_oleh` = pembuat). Karyawan mengajukan untuk dirinya sendiri → `pending`; hanya bisa ubah/hapus miliknya selama `pending` (lainnya 403/422). `PATCH /lembur/{id}/status` (setujui/tolak) hanya otoritas 1 & 2; `disetujui_oleh` diisi juga saat ditolak (= yang memproses).
+- Lembur belum mendukung lewat tengah malam (`jam_selesai` harus > `jam_mulai`) dan belum cek bentrok jam di tanggal yang sama. Durasi dihitung dari jam (belum disimpan) → payroll Fase 4 hanya pakai lembur `disetujui`.
+- `formatBadgeStatus` sekarang mewarnai `disetujui` hijau.
+- Seeder: pengaturan Cabang Pusat (08:00–17:00, toleransi 15 menit, Senin–Sabtu) + 2 hari libur contoh.
 
 ---
 

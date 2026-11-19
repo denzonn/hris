@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Cabang;
 use App\Models\Divisi;
+use App\Models\HariLibur;
 use App\Models\Jabatan;
 use App\Models\Jobdesk;
 use App\Models\User;
@@ -40,6 +41,17 @@ class DatabaseSeeder extends Seeder
             'longitude' => 119.4560000,
             'radius_meter' => 150,
         ]);
+
+        $pusat->pengaturanAbsensi()->updateOrCreate([], [
+            'jam_masuk' => '08:00',
+            'jam_pulang' => '17:00',
+            'toleransi_telat_menit' => 15,
+            'hari_kerja' => [1, 2, 3, 4, 5, 6],
+        ]);
+
+        foreach (['2026-12-25' => 'Hari Raya Natal', '2027-01-01' => 'Tahun Baru Masehi'] as $tanggal => $keterangan) {
+            HariLibur::updateOrCreate(['tanggal' => $tanggal], ['keterangan' => $keterangan]);
+        }
 
         $jabatan = [];
         foreach ([

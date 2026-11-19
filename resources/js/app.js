@@ -414,6 +414,7 @@ window.formatBadgeStatus = function (status) {
         badgeClass = "bg-red-600 text-white";
     } else if (
         statusLower === "diterima" ||
+        statusLower === "disetujui" ||
         statusLower === "selesai" ||
         statusLower === "approved"
     ) {
