@@ -10,7 +10,7 @@ Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 - [x] Fase 0 – Perbaikan Base Project
 - [x] Fase 1 – Master Data
 - [x] Fase 2 – Pengaturan Absensi
-- [ ] Fase 3 – Absensi
+- [x] Fase 3 – Absensi
 - [ ] Fase 4 – Payroll
 - [ ] Fase 5 – Dashboard & Portal Karyawan
 - [ ] Fase 6 – Rekrutmen
@@ -111,7 +111,7 @@ Catatan pelaksanaan Fase 2:
 
 ---
 
-## Fase 3 – Absensi
+## Fase 3 – Absensi ✅ Selesai
 
 ### 3.1 Absen Karyawan (self check-in)
 - Tabel `absensi`: user_id, tanggal, jam_masuk, jam_pulang, foto_masuk, foto_pulang, lat_masuk, lng_masuk, lat_pulang, lng_pulang, status (hadir/telat/izin/sakit/cuti/alpha/libur), menit_telat, keterangan. **Unique (user_id, tanggal)**.
@@ -137,6 +137,20 @@ Catatan pelaksanaan Fase 2:
 - Di server: cron `* * * * * php artisan schedule:run`.
 
 **Test wajib:** hitung telat, validasi radius, unique per hari, alpha otomatis tidak menimpa izin/cuti.
+
+Catatan pelaksanaan Fase 3:
+
+- Route: `absen` (absen mandiri, semua otoritas), `absensi_karyawan` & `rekap_absensi` (otoritas 1 & 2), `izin_karyawan` (semua otoritas, karyawan hanya datanya sendiri). Sidebar: Admin → Input Absensi, Izin, Rekap; HR → + Absen; Karyawan → Absen, Lembur, Izin.
+- **Aturan telat**: `menit_telat` dihitung dari jam masuk jadwal, toleransi hanya batas (jadwal 08:00, toleransi 15 → 08:15 = 0, 08:16 = **16** menit). Ada di `PengaturanAbsensi::menitTelat()`. Kalau aturan perusahaan ingin dihitung dari batas toleransi (08:16 = 1), ubah di method itu + test-nya.
+- Haversine: `Cabang::jarakKe()`. Hari kerja: `PengaturanAbsensi::tanggalKerja()` / `isHariKerja()` (hari_kerja − hari libur) — dipakai absen, izin, rekap, alpha.
+- Absen mandiri ditolak bila: tidak punya cabang, cabang belum punya pengaturan, bukan hari kerja/libur (belum ada opsi "tandai lembur"), sudah ada baris absensi hari itu (termasuk izin/cuti), di luar radius. Absen pulang tidak dicek hari kerja dan boleh sebelum jam pulang (pulang cepat belum ditandai).
+- Foto absensi di disk `public/absensi/Y-m` (belum dikompres → Fase 8).
+- Input manual HR: status `hadir` → server yang menentukan hadir/telat dari jam masuk. Status selain hadir mengosongkan jam & menit telat. Tanggal tidak boleh di masa depan. `diubah_oleh` = HR. **Fase 4: absensi pada periode payroll `final` harus dikunci** (belum ada cek).
+- Izin/sakit/cuti: hanya pengajuan `pending` yang bisa diubah/dihapus/diproses (sekali). Disetujui → baris absensi dibuat untuk hari kerja dalam rentang; menimpa `alpha`, tidak menimpa status lain (hadir dll). Pengajuan dari HR langsung disetujui. Bentrok dengan pengajuan pending/disetujui lain ditolak.
+- Saldo cuti: `User::sisaCuti($tahun)` = `jatah_cuti` − jumlah baris absensi `cuti` di tahun itu. Cuti lintas tahun dihitung dari saldo tahun `tanggal_mulai`.
+- Lampiran izin disimpan di disk **`local` (private)**, diunduh lewat `GET /izin_karyawan/{id}/lampiran` (pemilik atau HR/Admin). Path tidak ikut di JSON (`ada_lampiran` saja).
+- Rekap: pegawai aktif (tanpa Super Admin), default bulan berjalan, maksimal 3 bulan. Hari kerja = hari kerja cabang dalam periode penuh (belum memperhitungkan tanggal masuk pegawai). Lembur = lembur `disetujui` saja (menit). CSV pakai pemisah `;` + BOM agar langsung rapi di Excel locale Indonesia.
+- Alpha otomatis: `php artisan absensi:alpha {tanggal?}`, terjadwal `23:59` di `routes/console.php`. Melewati pegawai nonaktif, tanpa cabang/pengaturan, dan yang `tanggal_masuk`-nya setelah tanggal itu. Aman dijalankan ulang.
 
 ---
 

@@ -168,24 +168,11 @@
 
                     </a>
 
-                </div>
-
-            </div>
-
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
-            <div class="mt-8">
-
-                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Absensi
-                </p>
-
-                <div class="space-y-1">
-
                     <a href="{{ route('absensi_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                    {{ request()->routeIs('absensi_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('absensi_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
-                        <i class="fa-solid fa-calendar w-5 text-center"></i>
+                        <i class="fa-solid fa-calendar-check w-5 text-center"></i>
 
                         Input Absensi
 
@@ -193,7 +180,7 @@
 
                     <a href="{{ route('izin_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                    {{ request()->routeIs('izin_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('izin_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-calendar-xmark w-5 text-center"></i>
 
@@ -215,6 +202,7 @@
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -414,24 +402,21 @@
 
                     </a>
 
-                </div>
+                    <a href="{{ route('absen') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('absen*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
-            </div>
+                        <i class="fa-solid fa-fingerprint w-5 text-center"></i>
 
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
-            <div class="mt-8">
+                        Absen
 
-                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Absensi
-                </p>
-
-                <div class="space-y-1">
+                    </a>
 
                     <a href="{{ route('absensi_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                    {{ request()->routeIs('absensi_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('absensi_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
-                        <i class="fa-solid fa-calendar w-5 text-center"></i>
+                        <i class="fa-solid fa-calendar-check w-5 text-center"></i>
 
                         Input Absensi
 
@@ -439,7 +424,7 @@
 
                     <a href="{{ route('izin_karyawan') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                    {{ request()->routeIs('izin_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+                                {{ request()->routeIs('izin_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
 
                         <i class="fa-solid fa-calendar-xmark w-5 text-center"></i>
 
@@ -461,6 +446,7 @@
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
@@ -545,6 +531,16 @@
 
                 <div class="space-y-1">
 
+                    <a href="{{ route('absen') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                                {{ request()->routeIs('absen*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
+
+                        <i class="fa-solid fa-fingerprint w-5 text-center"></i>
+
+                        Absen
+
+                    </a>
+
                     <a href="{{ route('lembur') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-xl transition
                                 {{ request()->routeIs('lembur*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
@@ -552,28 +548,6 @@
                         <i class="fa-solid fa-clock w-5 text-center"></i>
 
                         Lembur
-
-                    </a>
-
-                </div>
-
-            </div>
-
-{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
-            <div class="mt-8">
-                <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
-                    Absensi
-                </p>
-
-                <div class="space-y-1">
-
-                    <a href="{{ route('absensi_karyawan') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('absensi_karyawan*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
-
-                        <i class="fa-solid fa-calendar w-5 text-center"></i>
-
-                        Input Absensi
 
                     </a>
 
@@ -587,21 +561,11 @@
 
                     </a>
 
-
-                    <a href="{{ route('rekap_absensi') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition
-                                {{ request()->routeIs('rekap_absensi*') ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100' }}">
-
-                        <i class="fa-solid fa-clipboard-check w-5 text-center"></i>
-
-                        Rekap Absensi
-
-                    </a>
-
                 </div>
 
             </div>
 
+{{-- BELUM AKTIF: aktifkan per fase (lihat docs/ROADMAP.md)
             <div class="mt-8">
 
                 <p class="text-xs uppercase tracking-widest text-slate-400 mb-3 px-3">
