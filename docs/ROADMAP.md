@@ -5,6 +5,18 @@ Stack: Laravel 12 · Blade · Tailwind · jQuery (AJAX + helper di `resources/js
 Urutan fase mengikuti dependensi: **Fondasi → Master → Pengaturan → Absensi → Payroll → Laporan → Modul tambahan**.
 Jangan lompat fase. Payroll butuh absensi, absensi butuh master + pengaturan.
 
+## Progress
+
+- [x] Fase 0 – Perbaikan Base Project
+- [x] Fase 1 – Master Data
+- [ ] Fase 2 – Pengaturan Absensi
+- [ ] Fase 3 – Absensi
+- [ ] Fase 4 – Payroll
+- [ ] Fase 5 – Dashboard & Portal Karyawan
+- [ ] Fase 6 – Rekrutmen
+- [ ] Fase 7 – Kendaraan / Booking
+- [ ] Fase 8 – Hardening & Deploy
+
 ---
 
 ## Fase 0 – Perbaikan Base Project (WAJIB sebelum fitur) ✅ Selesai
