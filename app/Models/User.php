@@ -104,6 +104,11 @@ class User extends Authenticatable
         return $this->hasMany(Absensi::class);
     }
 
+    public function lembur(): HasMany
+    {
+        return $this->hasMany(Lembur::class);
+    }
+
     /** Sisa cuti = jatah − hari cuti yang sudah tercatat di absensi tahun itu (dihitung, tidak disimpan). */
     public function sisaCuti(?int $tahun = null): int
     {

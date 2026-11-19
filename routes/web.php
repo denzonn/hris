@@ -11,6 +11,7 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\LemburController;
 use App\Http\Controllers\PengaturanAbsensiController;
+use App\Http\Controllers\RekapAbsensiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,10 @@ Route::middleware('auth')->group(function () {
         Route::post('absensi_karyawan', [AbsensiKaryawanController::class, 'store'])->name('absensi_karyawan.store');
         Route::put('absensi_karyawan/{absensi}', [AbsensiKaryawanController::class, 'update'])->name('absensi_karyawan.update');
         Route::delete('absensi_karyawan/{absensi}', [AbsensiKaryawanController::class, 'destroy'])->name('absensi_karyawan.destroy');
+
+        Route::get('rekap_absensi', [RekapAbsensiController::class, 'index'])->name('rekap_absensi');
+        Route::get('rekap_absensi/data', [RekapAbsensiController::class, 'data'])->name('rekap_absensi.data');
+        Route::get('rekap_absensi/export', [RekapAbsensiController::class, 'export'])->name('rekap_absensi.export');
     });
 
     // Absen mandiri: semua otoritas, hanya untuk diri sendiri
