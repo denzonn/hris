@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CekOtoritas;
+use App\Http\Middleware\WajibGantiPassword;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'otoritas' => CekOtoritas::class,
         ]);
+        $middleware->web(append: [WajibGantiPassword::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

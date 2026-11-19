@@ -43,6 +43,7 @@ class User extends Authenticatable
         'jatah_cuti',
         'foto',
         'aktif',
+        'wajib_ganti_password', // hanya diisi controller, tidak ada di FormRequest
     ];
 
     /** Sama dengan default kolom DB, supaya model yang baru dibuat langsung punya nilainya. */
@@ -77,6 +78,7 @@ class User extends Authenticatable
             'gaji_pokok' => 'decimal:2',
             'jatah_cuti' => 'integer',
             'aktif' => 'boolean',
+            'wajib_ganti_password' => 'boolean',
         ];
     }
 

@@ -22,6 +22,13 @@
 @endphp
 
 @section('content')
+    @if ($user->wajib_ganti_password)
+        <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+            Password Anda dibuat oleh admin. <b>Ganti password terlebih dahulu</b> untuk bisa memakai menu lain.
+        </div>
+    @endif
+
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="rounded-2xl border border-slate-200 bg-white p-6 lg:col-span-2">
             <div class="flex items-center gap-4">
@@ -77,7 +84,11 @@
                         App.loading.hide();
                         $('#formPassword')[0].reset();
                         $('#formPassword [data-error]').addClass('hidden').text('');
-                        showToast(res.message);
+                        @if ($user->wajib_ganti_password)
+                            Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message }).then(() => location.href = @json(route('dashboard')));
+                        @else
+                            showToast(res.message);
+                        @endif
                     },
                     error(xhr) {
                         App.loading.hide();

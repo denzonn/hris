@@ -59,7 +59,7 @@ class UserController extends Controller
             $data['foto'] = $request->file('foto')->store('pegawai', 'public');
         }
 
-        $user = User::create($data);
+        $user = User::create($data + ['wajib_ganti_password' => true]); // password dari admin
 
         if ($request->validated('pelamar_id')) {
             Pelamar::whereKey($request->validated('pelamar_id'))->update(['user_id' => $user->id]);
@@ -74,6 +74,8 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $data['password'] = $request->validated('password');
+            // di-reset admin → pemilik akun wajib ganti (kecuali mengubah akun sendiri)
+            $data['wajib_ganti_password'] = $user->isNot($request->user());
         }
 
         if ($request->hasFile('foto')) {

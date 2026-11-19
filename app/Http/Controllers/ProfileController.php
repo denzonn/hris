@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
     public function password(GantiPasswordRequest $request): JsonResponse
     {
-        $request->user()->update(['password' => $request->validated('password')]); // cast 'hashed'
+        $request->user()->update(['password' => $request->validated('password'), 'wajib_ganti_password' => false]); // cast 'hashed'
 
         return response()->json(['message' => 'Password berhasil diganti.']);
     }
