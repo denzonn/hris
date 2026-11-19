@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Jabatan extends Model
 {
@@ -22,5 +23,10 @@ class Jabatan extends Model
     public function divisi(): BelongsTo
     {
         return $this->belongsTo(Divisi::class);
+    }
+
+    public function jobdesk(): HasMany
+    {
+        return $this->hasMany(Jobdesk::class);
     }
 }

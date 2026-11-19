@@ -4,6 +4,7 @@ use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\JobdeskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +34,12 @@ Route::middleware('auth')->group(function () {
         Route::post('jabatan', [JabatanController::class, 'store'])->name('jabatan.store');
         Route::put('jabatan/{jabatan}', [JabatanController::class, 'update'])->name('jabatan.update');
         Route::delete('jabatan/{jabatan}', [JabatanController::class, 'destroy'])->name('jabatan.destroy');
+
+        Route::get('jobdesk', [JobdeskController::class, 'index'])->name('jobdesk');
+        Route::get('jobdesk/data', [JobdeskController::class, 'data'])->name('jobdesk.data');
+        Route::post('jobdesk', [JobdeskController::class, 'store'])->name('jobdesk.store');
+        Route::put('jobdesk/{jobdesk}', [JobdeskController::class, 'update'])->name('jobdesk.update');
+        Route::delete('jobdesk/{jobdesk}', [JobdeskController::class, 'destroy'])->name('jobdesk.destroy');
     });
 });
 
