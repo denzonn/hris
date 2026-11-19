@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\AbsensiKaryawanController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisiController;
@@ -65,6 +66,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('hari_libur/{hari_libur}', [HariLiburController::class, 'destroy'])->name('hari_libur.destroy');
 
         Route::patch('lembur/{lembur}/status', [LemburController::class, 'status'])->name('lembur.status');
+
+        Route::get('absensi_karyawan', [AbsensiKaryawanController::class, 'index'])->name('absensi_karyawan');
+        Route::get('absensi_karyawan/data', [AbsensiKaryawanController::class, 'data'])->name('absensi_karyawan.data');
+        Route::post('absensi_karyawan', [AbsensiKaryawanController::class, 'store'])->name('absensi_karyawan.store');
+        Route::put('absensi_karyawan/{absensi}', [AbsensiKaryawanController::class, 'update'])->name('absensi_karyawan.update');
+        Route::delete('absensi_karyawan/{absensi}', [AbsensiKaryawanController::class, 'destroy'])->name('absensi_karyawan.destroy');
     });
 
     // Absen mandiri: semua otoritas, hanya untuk diri sendiri
