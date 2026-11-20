@@ -5,54 +5,60 @@
 @section('page_description', 'Master data jabatan & tunjangan jabatan')
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200 bg-white">
-
-        <div class="flex flex-col gap-3 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div class="flex w-full flex-col gap-3 md:flex-row">
-                <div class="relative w-full md:w-80">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="search" placeholder="Cari nama jabatan..."
-                        class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+    <div class="space-y-6">
+        {{-- TOOLBAR --}}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex w-full min-w-0 flex-col gap-3 sm:max-w-xl sm:flex-row">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="search" placeholder="Cari nama jabatan..."
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    <div class="sm:w-48">
+                        <x-select name="filter_divisi" placeholder="Semua Divisi">
+                            @foreach ($divisi as $d)
+                                <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
                 </div>
-                <div class="w-full md:w-56">
-                    <x-select name="filter_divisi" placeholder="Semua Divisi">
-                        @foreach ($divisi as $d)
-                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
-                        @endforeach
-                    </x-select>
-                </div>
-            </div>
 
-            <div class="flex gap-2">
-                <button type="button" id="btnRefresh"
-                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-                <button type="button" onclick="tambahJabatan()"
-                    class="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary_hover">
-                    <i class="fa-solid fa-plus"></i> Tambah Jabatan
-                </button>
+                <div class="flex shrink-0 gap-2">
+                    <button type="button" id="btnRefresh"
+                        class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" title="Refresh">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button type="button" onclick="tambahJabatan()"
+                        class="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary_hover">
+                        <i class="fa-solid fa-plus"></i> Tambah Jabatan
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
-                    <tr>
-                        <th class="px-6 py-4 w-12">No</th>
-                        <th class="px-6 py-4">Nama Jabatan</th>
-                        <th class="px-6 py-4">Divisi</th>
-                        <th class="px-6 py-4">Tunjangan Jabatan</th>
-                        <th class="px-6 py-4 text-center w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
-            </table>
-        </div>
+        {{-- TABEL --}}
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        <tr>
+                            <th class="w-16 px-6 py-3.5">No</th>
+                            <th class="px-6 py-3.5">Nama Jabatan</th>
+                            <th class="px-6 py-3.5">Divisi</th>
+                            <th class="px-6 py-3.5">Tunjangan Jabatan</th>
+                            <th class="px-6 py-3.5">Jumlah Pegawai</th>
+                            <th class="w-36 px-6 py-3.5 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                </table>
+            </div>
 
-        <div class="flex flex-col gap-3 border-t border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div id="info" class="text-sm text-slate-500"></div>
-            <div id="pagination" class="flex flex-wrap gap-2"></div>
+            <div class="flex flex-col gap-3 border-t border-slate-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div id="info" class="text-sm text-slate-500"></div>
+                <div id="pagination" class="flex flex-wrap gap-2"></div>
+            </div>
         </div>
     </div>
 
@@ -104,25 +110,29 @@
                 success(res) {
                     rows = {};
                     if (!res.data.length) {
-                        $('#tableData').html(emptyTable(5, 'Belum ada jabatan', 'Tambahkan jabatan baru.'));
+                        $('#tableData').html(emptyTable(6, 'Belum ada jabatan', 'Tambahkan jabatan baru.'));
                     } else {
                         $('#tableData').html(res.data.map((item, i) => {
                             rows[item.id] = item;
+                            const warna = warnaKategori(item.divisi_id);
                             return `
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-6 py-4">${res.from + i}</td>
-                                    <td class="px-6 py-4 font-semibold">${esc(item.nama)}</td>
-                                    <td class="px-6 py-4">${esc(item.divisi?.nama ?? '-')}</td>
-                                    <td class="px-6 py-4">${formatRupiah(Math.round(item.tunjangan_jabatan))}</td>
+                                <tr class="transition-colors hover:bg-slate-50">
+                                    <td class="px-6 py-4 tabular-nums text-slate-500">${res.from + i}</td>
+                                    <td class="px-6 py-4 font-semibold text-slate-800">${esc(item.nama)}</td>
                                     <td class="px-6 py-4">
-                                        <div class="flex justify-center gap-2">
+                                        <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${warna.badge}">${esc(item.divisi?.nama ?? '-')}</span>
+                                    </td>
+                                    <td class="px-6 py-4 tabular-nums">${formatRupiah(Math.round(item.tunjangan_jabatan))}</td>
+                                    <td class="px-6 py-4 tabular-nums">${item.pegawai_count} Pegawai</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="inline-flex gap-2">
                                             <button type="button" onclick="editJabatan(${item.id})" title="Edit"
-                                                class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100">
-                                                <i class="fa-solid fa-pen"></i>
+                                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-amber-600 hover:bg-amber-50">
+                                                <i class="fa-solid fa-pen text-xs"></i>
                                             </button>
                                             <button type="button" onclick="hapusJabatan(${item.id})" title="Hapus"
-                                                class="h-10 w-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-100">
-                                                <i class="fa-solid fa-trash"></i>
+                                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-red-600 hover:bg-red-50">
+                                                <i class="fa-solid fa-trash text-xs"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -132,7 +142,7 @@
                     renderInfo('#info', res);
                     renderPagination(res, 'loadData');
                 },
-                error: () => $('#tableData').html(tableError(5)),
+                error: () => $('#tableData').html(tableError(6)),
             });
         }
 

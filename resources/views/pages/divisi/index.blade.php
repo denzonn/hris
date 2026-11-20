@@ -5,43 +5,49 @@
 @section('page_description', 'Master data divisi')
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200 bg-white">
+    <div class="space-y-6">
+        {{-- TOOLBAR --}}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="relative w-full sm:max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search" placeholder="Cari nama divisi..."
+                        class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+                </div>
 
-        <div class="flex flex-col gap-3 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="search" placeholder="Cari nama divisi..."
-                    class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
-            </div>
-
-            <div class="flex gap-2">
-                <button type="button" id="btnRefresh"
-                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-                <button type="button" onclick="tambahDivisi()"
-                    class="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary_hover">
-                    <i class="fa-solid fa-plus"></i> Tambah Divisi
-                </button>
+                <div class="flex shrink-0 gap-2">
+                    <button type="button" id="btnRefresh"
+                        class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" title="Refresh">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button type="button" onclick="tambahDivisi()"
+                        class="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary_hover">
+                        <i class="fa-solid fa-plus"></i> Tambah Divisi
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
-                    <tr>
-                        <th class="px-6 py-4 w-12">No</th>
-                        <th class="px-6 py-4">Nama Divisi</th>
-                        <th class="px-6 py-4 text-center w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
-            </table>
-        </div>
+        {{-- TABEL --}}
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        <tr>
+                            <th class="w-20 px-6 py-3.5">No</th>
+                            <th class="px-6 py-3.5">Nama Divisi</th>
+                            <th class="px-6 py-3.5">Total Pegawai</th>
+                            <th class="w-36 px-6 py-3.5 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                </table>
+            </div>
 
-        <div class="flex flex-col gap-3 border-t border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div id="info" class="text-sm text-slate-500"></div>
-            <div id="pagination" class="flex flex-wrap gap-2"></div>
+            <div class="flex flex-col gap-3 border-t border-slate-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div id="info" class="text-sm text-slate-500"></div>
+                <div id="pagination" class="flex flex-wrap gap-2"></div>
+            </div>
         </div>
     </div>
 
@@ -87,23 +93,40 @@
                 success(res) {
                     rows = {};
                     if (!res.data.length) {
-                        $('#tableData').html(emptyTable(3, 'Belum ada divisi', 'Tambahkan divisi baru.'));
+                        $('#tableData').html(emptyTable(4, 'Belum ada divisi', 'Tambahkan divisi baru.'));
                     } else {
                         $('#tableData').html(res.data.map((item, i) => {
                             rows[item.id] = item;
+                            const warna = warnaKategori(item.id);
                             return `
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-6 py-4">${res.from + i}</td>
-                                    <td class="px-6 py-4 font-semibold">${esc(item.nama)}</td>
+                                <tr class="transition-colors hover:bg-slate-50">
+                                    <td class="px-6 py-4 tabular-nums text-slate-500">${res.from + i}</td>
                                     <td class="px-6 py-4">
-                                        <div class="flex justify-center gap-2">
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${warna.avatar}">
+                                                ${esc(inisial(item.nama))}
+                                            </div>
+                                            <div>
+                                                <div class="font-semibold text-slate-800">${esc(item.nama)}</div>
+                                                <div class="text-xs text-slate-400">${item.jabatan_count} jabatan</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
+                                            <span class="h-1.5 w-1.5 rounded-full ${warna.dot}"></span>
+                                            ${item.pegawai_count} Pegawai
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="inline-flex gap-2">
                                             <button type="button" onclick="editDivisi(${item.id})" title="Edit"
-                                                class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100">
-                                                <i class="fa-solid fa-pen"></i>
+                                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-amber-600 hover:bg-amber-50">
+                                                <i class="fa-solid fa-pen text-xs"></i>
                                             </button>
                                             <button type="button" onclick="hapusDivisi(${item.id})" title="Hapus"
-                                                class="h-10 w-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-100">
-                                                <i class="fa-solid fa-trash"></i>
+                                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-red-600 hover:bg-red-50">
+                                                <i class="fa-solid fa-trash text-xs"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -113,7 +136,7 @@
                     renderInfo('#info', res);
                     renderPagination(res, 'loadData');
                 },
-                error: () => $('#tableData').html(tableError(3)),
+                error: () => $('#tableData').html(tableError(4)),
             });
         }
 

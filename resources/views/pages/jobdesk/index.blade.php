@@ -2,54 +2,45 @@
 
 @section('title', 'Jobdesk')
 @section('page_title', 'Jobdesk')
-@section('page_description', 'Uraian tugas per jabatan')
+@section('page_description', 'Uraian tugas pokok & tanggung jawab per jabatan')
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200 bg-white">
-
-        <div class="flex flex-col gap-3 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div class="flex w-full flex-col gap-3 md:flex-row">
-                <div class="relative w-full md:w-80">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="search" placeholder="Cari deskripsi..."
-                        class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+    <div class="space-y-6">
+        {{-- TOOLBAR --}}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex w-full min-w-0 flex-col gap-3 sm:max-w-xl sm:flex-row">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="search" placeholder="Cari tugas atau nama jabatan..."
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    <div class="sm:w-56">
+                        <x-select name="filter_jabatan" placeholder="Semua Jabatan">
+                            @foreach ($jabatan as $j)
+                                <option value="{{ $j->id }}">{{ $j->nama }} ({{ $j->divisi?->nama }})</option>
+                            @endforeach
+                        </x-select>
+                    </div>
                 </div>
-                <div class="w-full md:w-64">
-                    <x-select name="filter_jabatan" placeholder="Semua Jabatan">
-                        @foreach ($jabatan as $j)
-                            <option value="{{ $j->id }}">{{ $j->nama }} ({{ $j->divisi?->nama }})</option>
-                        @endforeach
-                    </x-select>
-                </div>
-            </div>
 
-            <div class="flex gap-2">
-                <button type="button" id="btnRefresh"
-                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-                <button type="button" onclick="tambahJobdesk()"
-                    class="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary_hover">
-                    <i class="fa-solid fa-plus"></i> Tambah Jobdesk
-                </button>
+                <div class="flex shrink-0 gap-2">
+                    <button type="button" id="btnRefresh"
+                        class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" title="Refresh">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button type="button" onclick="tambahJobdesk()"
+                        class="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary_hover">
+                        <i class="fa-solid fa-plus"></i> Tambah Jobdesk
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
-                    <tr>
-                        <th class="px-6 py-4 w-12">No</th>
-                        <th class="px-6 py-4 w-56">Jabatan</th>
-                        <th class="px-6 py-4">Deskripsi</th>
-                        <th class="px-6 py-4 text-center w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
-            </table>
-        </div>
+        {{-- KARTU PER JABATAN --}}
+        <div id="kartuJobdesk" class="grid grid-cols-1 gap-6 md:grid-cols-2"></div>
 
-        <div class="flex flex-col gap-3 border-t border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div id="info" class="text-sm text-slate-500"></div>
             <div id="pagination" class="flex flex-wrap gap-2"></div>
         </div>
@@ -74,8 +65,8 @@
                     @endforeach
                 </x-select>
                 <div>
-                    <label for="deskripsi" class="mb-1.5 block text-sm font-medium text-slate-700">Deskripsi</label>
-                    <textarea name="deskripsi" id="deskripsi" rows="5" required
+                    <label for="deskripsi" class="mb-1.5 block text-sm font-medium text-slate-700">Tugas / Tanggung Jawab</label>
+                    <textarea name="deskripsi" id="deskripsi" rows="4" required placeholder="mis. Memasang head unit, subwoofer, dan peredam suara kendaraan."
                         class="w-full rounded-xl border-slate-200 bg-slate-50 text-sm text-slate-700 focus:border-primary focus:bg-white focus:ring-primary"></textarea>
                     <p data-error="deskripsi" class="mt-1 hidden text-xs text-red-600"></p>
                 </div>
@@ -94,50 +85,80 @@
 @push('addon-script')
     <script>
         const baseUrl = @json(url('jobdesk'));
-        let rows = {};
+        let tugas = {}; // id jobdesk → item
         let editId = null;
 
         const esc = (v) => $('<div>').text(v ?? '').html();
+
+        function kartu(jabatan) {
+            const warna = warnaKategori(jabatan.divisi_id);
+            const daftar = jabatan.jobdesk.map((t) => {
+                tugas[t.id] = t;
+                return `
+                    <li class="group flex items-start gap-2">
+                        <i class="fa-solid fa-circle-check mt-0.5 shrink-0 text-primary"></i>
+                        <span class="flex-1 whitespace-pre-line">${esc(t.deskripsi)}</span>
+                        <span class="flex shrink-0 gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                            <button type="button" onclick="editJobdesk(${t.id})" title="Edit"
+                                class="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 bg-white text-amber-600 hover:bg-amber-50">
+                                <i class="fa-solid fa-pen text-[11px]"></i>
+                            </button>
+                            <button type="button" onclick="hapusJobdesk(${t.id})" title="Hapus"
+                                class="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 bg-white text-red-600 hover:bg-red-50">
+                                <i class="fa-solid fa-trash text-[11px]"></i>
+                            </button>
+                        </span>
+                    </li>`;
+            }).join('');
+
+            return `
+                <div class="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+                    <div>
+                        <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+                            <div class="min-w-0">
+                                <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${warna.badge}">${esc(jabatan.divisi?.nama ?? '-')}</span>
+                                <h3 class="mt-1.5 truncate text-base font-bold text-slate-800">${esc(jabatan.nama)}</h3>
+                            </div>
+                            <button type="button" onclick="tambahJobdesk(${jabatan.id})" title="Tambah tugas"
+                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-primary hover:bg-red-50">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-2.5 py-4">
+                            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Tanggung Jawab Utama</p>
+                            ${daftar
+                                ? `<ul class="space-y-2 text-sm text-slate-700">${daftar}</ul>`
+                                : '<p class="text-sm italic text-slate-400">Belum ada jobdesk untuk jabatan ini.</p>'}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
+                        <span>${jabatan.jobdesk_max_updated_at ? 'Diperbarui: ' + formatTanggalIndo(String(jabatan.jobdesk_max_updated_at).replace(' ', 'T')) : '&nbsp;'}</span>
+                        <span class="font-semibold text-primary">${jabatan.pegawai_count} Pegawai Ditugaskan</span>
+                    </div>
+                </div>`;
+        }
 
         function loadData(page = 1) {
             ajaxRequest({
                 url: @json(route('jobdesk.data')),
                 data: { page, search: $('#search').val(), jabatan_id: $('#filter_jabatan').val() },
-                before: () => loadingSkeleton('#tableData', 5, skeleton.table),
+                before: () => $('#kartuJobdesk').html(Array(4).fill(
+                    '<div class="h-56 animate-pulse rounded-2xl border border-slate-200 bg-white"></div>').join('')),
                 success(res) {
-                    rows = {};
-                    if (!res.data.length) {
-                        $('#tableData').html(emptyTable(4, 'Belum ada jobdesk', 'Tambahkan jobdesk baru.'));
-                    } else {
-                        $('#tableData').html(res.data.map((item, i) => {
-                            rows[item.id] = item;
-                            return `
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-6 py-4 align-top">${res.from + i}</td>
-                                    <td class="px-6 py-4 align-top">
-                                        <div class="font-semibold">${esc(item.jabatan?.nama ?? '-')}</div>
-                                        <div class="text-xs text-slate-400">${esc(item.jabatan?.divisi?.nama ?? '-')}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-pre-line">${esc(item.deskripsi)}</td>
-                                    <td class="px-6 py-4 align-top">
-                                        <div class="flex justify-center gap-2">
-                                            <button type="button" onclick="editJobdesk(${item.id})" title="Edit"
-                                                class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                            <button type="button" onclick="hapusJobdesk(${item.id})" title="Hapus"
-                                                class="h-10 w-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-100">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>`;
-                        }).join(''));
-                    }
+                    tugas = {};
+                    $('#kartuJobdesk').html(res.data.length ? res.data.map(kartu).join('') : `
+                        <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500 md:col-span-2">
+                            <i class="fa-solid fa-list-check text-4xl text-slate-300"></i>
+                            <p class="mt-3 font-semibold text-slate-700">Tidak ada jabatan</p>
+                            <p class="text-sm">Ubah pencarian atau tambahkan jabatan di menu Jabatan.</p>
+                        </div>`);
                     renderInfo('#info', res);
                     renderPagination(res, 'loadData');
                 },
-                error: () => $('#tableData').html(tableError(4)),
+                error: () => $('#kartuJobdesk').html(
+                    '<div class="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-600 md:col-span-2">Gagal memuat data.</div>'),
             });
         }
 
@@ -146,16 +167,16 @@
             $('#formJobdesk [data-error]').addClass('hidden').text('');
         }
 
-        function tambahJobdesk() {
+        function tambahJobdesk(jabatanId = '') {
             editId = null;
             resetForm();
-            $('#jabatan_id').val($('#filter_jabatan').val());
             $('#modalTitle').text('Tambah Jobdesk');
+            $('#jabatan_id').val(jabatanId);
             showModal('modalJobdesk');
         }
 
         function editJobdesk(id) {
-            const item = rows[id];
+            const item = tugas[id];
             editId = id;
             resetForm();
             $('#modalTitle').text('Edit Jobdesk');
@@ -165,9 +186,10 @@
         }
 
         function hapusJobdesk(id) {
+            const teks = tugas[id].deskripsi;
             hapusData({
                 url: `${baseUrl}/${id}`,
-                name: 'jobdesk ' + esc(rows[id].jabatan?.nama ?? ''),
+                name: esc(teks.length > 60 ? teks.slice(0, 60) + '…' : teks),
                 reload: () => loadData(),
             });
         }

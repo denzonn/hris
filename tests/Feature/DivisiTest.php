@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Divisi;
+use App\Models\Jabatan;
 use App\Models\User;
 
 beforeEach(function () {
@@ -37,6 +38,17 @@ test('admin bisa mengambil data divisi dengan search', function () {
         ->assertOk()
         ->assertJsonPath('total', 1)
         ->assertJsonPath('data.0.nama', 'Produksi');
+});
+
+test('data divisi menyertakan jumlah jabatan dan pegawai aktif', function () {
+    $divisi = Divisi::create(['nama' => 'Produksi']);
+    Jabatan::create(['nama' => 'Operator', 'divisi_id' => $divisi->id]);
+    User::factory()->count(2)->create(['divisi_id' => $divisi->id]);
+    User::factory()->nonaktif()->create(['divisi_id' => $divisi->id]);
+
+    $this->actingAs($this->admin)->getJson('/divisi/data?search=prod')
+        ->assertJsonPath('data.0.jabatan_count', 1)
+        ->assertJsonPath('data.0.pegawai_count', 2);
 });
 
 test('admin bisa mengubah divisi tanpa bentrok unik dengan dirinya sendiri', function () {

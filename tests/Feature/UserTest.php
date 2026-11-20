@@ -3,6 +3,7 @@
 use App\Models\Cabang;
 use App\Models\Divisi;
 use App\Models\Jabatan;
+use App\Models\Jobdesk;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
@@ -101,6 +102,17 @@ test('data pegawai bisa difilter search, cabang, divisi, dan status aktif', func
         ->assertJsonPath('total', 1);
     $this->actingAs($this->admin)->getJson('/user/data?aktif=0')
         ->assertJsonPath('total', 1)->assertJsonPath('data.0.name', 'Cici');
+});
+
+test('data pegawai bisa difilter status kerja dan menyertakan jobdesk jabatannya', function () {
+    Jobdesk::create(['jabatan_id' => $this->jabatan->id, 'deskripsi' => 'Menjalankan mesin']);
+    User::factory()->create(['name' => 'Andi', 'status_kerja' => 'kontrak', 'jabatan_id' => $this->jabatan->id]);
+    User::factory()->create(['name' => 'Budi', 'status_kerja' => 'tetap']);
+
+    $this->actingAs($this->admin)->getJson('/user/data?status_kerja=kontrak')
+        ->assertJsonPath('total', 1)
+        ->assertJsonPath('data.0.name', 'Andi')
+        ->assertJsonPath('data.0.jabatan.jobdesk.0.deskripsi', 'Menjalankan mesin');
 });
 
 test('admin bisa menonaktifkan dan mengaktifkan pegawai', function () {

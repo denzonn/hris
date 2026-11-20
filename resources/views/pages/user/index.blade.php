@@ -5,62 +5,86 @@
 @section('page_description', 'Akun login & data kepegawaian')
 
 @section('content')
-    <div class="rounded-2xl border border-slate-200 bg-white">
-
-        <div class="flex flex-col gap-3 border-b border-slate-100 p-5 xl:flex-row xl:items-center xl:justify-between">
-            <div class="grid w-full gap-3 md:grid-cols-4">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="search" placeholder="Cari nama / email / NIK..."
-                        class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+    <div class="space-y-6">
+        {{-- TOOLBAR --}}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex min-w-0 flex-1 flex-wrap items-center gap-3 lg:flex-nowrap">
+                    <div class="relative min-w-[160px] flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="search" placeholder="Cari nama / NIK..."
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-11 text-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    <div class="w-full sm:w-40">
+                        <x-select name="filter_cabang" placeholder="Semua Cabang">
+                            @foreach ($cabang as $c)
+                                <option value="{{ $c->id }}">{{ $c->nama }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
+                    <div class="w-full sm:w-36">
+                        <x-select name="filter_divisi" placeholder="Semua Divisi">
+                            @foreach ($divisi as $d)
+                                <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
+                    <div class="w-full sm:w-36">
+                        <x-select name="filter_status_kerja" placeholder="Status Kerja">
+                            <option value="tetap">Tetap</option>
+                            <option value="kontrak">Kontrak</option>
+                            <option value="magang">Magang</option>
+                        </x-select>
+                    </div>
+                    <div class="w-full sm:w-36">
+                        <x-select name="filter_aktif" placeholder="Semua Status">
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
+                        </x-select>
+                    </div>
                 </div>
-                <x-select name="filter_cabang" placeholder="Semua Cabang">
-                    @foreach ($cabang as $c)
-                        <option value="{{ $c->id }}">{{ $c->nama }}</option>
-                    @endforeach
-                </x-select>
-                <x-select name="filter_divisi" placeholder="Semua Divisi">
-                    @foreach ($divisi as $d)
-                        <option value="{{ $d->id }}">{{ $d->nama }}</option>
-                    @endforeach
-                </x-select>
-                <x-select name="filter_aktif" placeholder="Semua Status">
-                    <option value="1">Aktif</option>
-                    <option value="0">Nonaktif</option>
-                </x-select>
-            </div>
 
-            <div class="flex gap-2">
-                <button type="button" id="btnRefresh"
-                    class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100" title="Refresh">
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-                <button type="button" onclick="tambahUser()"
-                    class="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary_hover">
-                    <i class="fa-solid fa-plus"></i> Tambah Pegawai
-                </button>
+                <div class="flex shrink-0 gap-2">
+                    <button type="button" id="btnRefresh"
+                        class="h-10 w-10 shrink-0 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" title="Refresh">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button type="button" onclick="tambahUser()"
+                        class="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary_hover">
+                        <i class="fa-solid fa-user-plus"></i> Tambah Pegawai
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
-                    <tr>
-                        <th class="px-6 py-4 w-12">No</th>
-                        <th class="px-6 py-4">Pegawai</th>
-                        <th class="px-6 py-4">Cabang / Divisi / Jabatan</th>
-                        <th class="px-6 py-4">Status Kerja</th>
-                        <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4 text-center w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
-            </table>
-        </div>
+        <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
+            {{-- TABEL --}}
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-7 xl:col-span-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <tr>
+                                <th class="w-12 px-4 py-3.5 text-center">No</th>
+                                <th class="min-w-[200px] px-4 py-3.5">Pegawai</th>
+                                <th class="px-4 py-3.5">Divisi & Jabatan</th>
+                                <th class="px-4 py-3.5">Status</th>
+                                <th class="w-32 px-4 py-3.5 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableData" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                    </table>
+                </div>
 
-        <div class="flex flex-col gap-3 border-t border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-            <div id="info" class="text-sm text-slate-500"></div>
-            <div id="pagination" class="flex flex-wrap gap-2"></div>
+                <div class="flex flex-col gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div id="info" class="text-sm text-slate-500"></div>
+                    <div id="pagination" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            {{-- PROFIL CEPAT --}}
+            <div id="profilCepat" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md lg:sticky lg:top-24 lg:col-span-5 xl:col-span-4">
+                <div class="p-10 text-center text-sm text-slate-400">Pilih pegawai untuk melihat profil.</div>
+            </div>
         </div>
     </div>
 
@@ -169,11 +193,153 @@
 
         const esc = (v) => $('<div>').text(v ?? '').html();
 
-        function fotoHtml(item) {
+        let pilihId = null; // pegawai yang tampil di Profil Cepat
+
+        const STATUS_KERJA = {
+            tetap: ['Tetap', 'bg-emerald-50 text-emerald-700', 'bg-emerald-600'],
+            kontrak: ['Kontrak', 'bg-red-50 text-red-700', 'bg-red-600'],
+            magang: ['Magang', 'bg-amber-50 text-amber-700', 'bg-amber-500'],
+        };
+
+        function avatar(item, ukuran = 'h-10 w-10 text-sm') {
             if (item.foto) {
-                return `<img src="${storageUrl}/${esc(item.foto)}" class="h-11 w-11 rounded-full object-cover" alt="">`;
+                return `<img src="${storageUrl}/${esc(item.foto)}" class="${ukuran} shrink-0 rounded-full object-cover" alt="">`;
             }
-            return `<div class="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 font-semibold text-slate-500">${esc(item.name.charAt(0).toUpperCase())}</div>`;
+            return `<div class="flex ${ukuran} shrink-0 items-center justify-center rounded-full font-bold ${warnaKategori(item.divisi_id).avatar}">${esc(inisial(item.name))}</div>`;
+        }
+
+        function badgeStatusKerja(status) {
+            const [label, cls, dot] = STATUS_KERJA[status] ?? ['-', 'bg-slate-100 text-slate-600', 'bg-slate-400'];
+            return `<span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ${cls}">
+                <span class="h-1.5 w-1.5 rounded-full ${dot}"></span>${label}</span>`;
+        }
+
+        function baris(item, no) {
+            const dipilih = item.id === pilihId;
+            return `
+                <tr onclick="pilihPegawai(${item.id})"
+                    class="cursor-pointer border-l-4 transition-colors ${dipilih ? 'border-primary bg-red-50/40' : 'border-transparent hover:bg-slate-50'}">
+                    <td class="px-4 py-3.5 text-center tabular-nums text-slate-500">${no}</td>
+                    <td class="px-4 py-3.5">
+                        <div class="flex items-center gap-3">
+                            ${avatar(item)}
+                            <div class="min-w-0">
+                                <div class="whitespace-nowrap font-semibold text-slate-800">${esc(item.name)}</div>
+                                <div class="whitespace-nowrap font-mono text-xs text-slate-400">${esc(item.nik || '-')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3.5">
+                        <div class="whitespace-nowrap font-medium text-slate-700">${esc(item.jabatan?.nama ?? '-')}</div>
+                        <div class="text-xs font-semibold ${warnaKategori(item.divisi_id).badge.split(' ')[1]}">${item.divisi ? 'Divisi ' + esc(item.divisi.nama) : '-'}</div>
+                    </td>
+                    <td class="px-4 py-3.5">
+                        ${badgeStatusKerja(item.status_kerja)}
+                        ${item.aktif ? '' : '<div class="mt-1 text-xs font-semibold text-slate-400">Nonaktif</div>'}
+                    </td>
+                    <td class="px-4 py-3.5 text-right" onclick="event.stopPropagation()">
+                        <div class="inline-flex gap-1.5">
+                            <button type="button" onclick="pilihPegawai(${item.id})" title="Lihat profil"
+                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white ${dipilih ? 'text-primary' : 'text-slate-500'} hover:bg-red-50">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                            <button type="button" onclick="editUser(${item.id})" title="Edit"
+                                class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-amber-600 hover:bg-amber-50">
+                                <i class="fa-solid fa-pen text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+        }
+
+        function profil(item) {
+            if (!item) {
+                return '<div class="p-10 text-center text-sm text-slate-400">Pilih pegawai untuk melihat profil.</div>';
+            }
+            const info = (label, isi) => `
+                <div>
+                    <span class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">${label}</span>
+                    <span class="font-semibold text-slate-800">${isi}</span>
+                </div>`;
+            const kontak = (ikon, label, isi) => `
+                <div class="flex items-center justify-between gap-3 border-b border-slate-100 py-2">
+                    <span class="flex shrink-0 items-center gap-2 text-slate-500"><i class="fa-solid ${ikon} w-4 text-center text-xs"></i>${label}</span>
+                    <span class="truncate text-right text-slate-800">${isi}</span>
+                </div>`;
+            const jobdesk = item.jabatan?.jobdesk?.length
+                ? item.jabatan.jobdesk.map((j) => `<li class="flex gap-2"><i class="fa-solid fa-circle-check mt-0.5 text-xs text-emerald-600"></i><span>${esc(j.deskripsi)}</span></li>`).join('')
+                : '<li class="italic text-slate-400">Belum ada jobdesk untuk jabatan ini.</li>';
+            const toggle = item.id === authId ? '' : `
+                <button type="button" onclick="toggleAktif(${item.id})"
+                    class="rounded-xl border px-3.5 py-2 text-sm font-medium ${item.aktif
+                        ? 'border-red-200 bg-white text-red-600 hover:bg-red-50'
+                        : 'border-emerald-200 bg-white text-emerald-600 hover:bg-emerald-50'}">
+                    ${item.aktif ? 'Nonaktifkan' : 'Aktifkan'}
+                </button>`;
+
+            return `
+                <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 p-5">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Profil Cepat Pegawai</h3>
+                        <p class="text-xs text-slate-500">Detail penugasan & akun login</p>
+                    </div>
+                    <span class="rounded-full px-2.5 py-1 text-xs font-semibold ${item.aktif ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+                        ${item.aktif ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                </div>
+
+                <div class="space-y-6 p-6">
+                    <div class="flex items-center gap-4">
+                        ${avatar(item, 'h-16 w-16 text-xl')}
+                        <div class="min-w-0">
+                            <h4 class="truncate text-lg font-bold text-slate-800">${esc(item.name)}</h4>
+                            <p class="text-sm text-slate-500">${esc(item.jabatan?.nama ?? '-')}</p>
+                            <p class="mt-0.5 font-mono text-xs font-semibold text-primary">NIK: ${esc(item.nik || '-')}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                        ${info('Divisi', esc(item.divisi?.nama ?? '-'))}
+                        ${info('Status Kerja', esc(STATUS_KERJA[item.status_kerja]?.[0] ?? '-'))}
+                        ${info('Tanggal Masuk', item.tanggal_masuk ? formatTanggalIndo(item.tanggal_masuk).replace(/^\w+, /, '') : '-')}
+                        ${info('Hak Akses', `<span class="text-primary">${esc(item.otoritas?.nama ?? '-')}</span>`)}
+                        ${item.status_kerja !== 'tetap' && item.tanggal_akhir_kontrak
+                            ? info('Akhir Kontrak', formatTanggalIndo(item.tanggal_akhir_kontrak).replace(/^\w+, /, '')) : ''}
+                    </div>
+
+                    <div class="space-y-1 text-sm">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kontak & Akses Sistem</p>
+                        ${kontak('fa-envelope', 'Email', `<span class="font-mono text-xs">${esc(item.email)}</span>`)}
+                        ${kontak('fa-phone', 'No. HP', esc(item.no_hp || '-'))}
+                        ${kontak('fa-location-dot', 'Penempatan', esc(item.cabang?.nama ?? '-'))}
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Jobdesk Ditugaskan</p>
+                        <ul class="space-y-1.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">${jobdesk}</ul>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 border-t border-slate-200 bg-slate-50 p-4">
+                    ${toggle}
+                    <button type="button" onclick="editUser(${item.id})"
+                        class="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary_hover">
+                        Edit Pegawai
+                    </button>
+                </div>`;
+        }
+
+        function pilihPegawai(id) {
+            pilihId = id;
+            renderTabel();
+            $('#profilCepat').html(profil(rows[id]));
+            // layar kecil: profil ada di bawah tabel → gulir ke sana
+            if (window.innerWidth < 1024) $('#profilCepat')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        let halaman = null; // respons terakhir, untuk render ulang saat ganti pilihan
+        function renderTabel() {
+            $('#tableData').html(halaman.data.map((item, i) => baris(item, halaman.from + i)).join(''));
         }
 
         function loadData(page = 1) {
@@ -184,63 +350,26 @@
                     search: $('#search').val(),
                     cabang_id: $('#filter_cabang').val(),
                     divisi_id: $('#filter_divisi').val(),
+                    status_kerja: $('#filter_status_kerja').val(),
                     aktif: $('#filter_aktif').val(),
                 },
                 before: () => loadingSkeleton('#tableData', 5, skeleton.table),
                 success(res) {
                     rows = {};
+                    halaman = res;
+                    res.data.forEach((item) => rows[item.id] = item);
+                    if (!rows[pilihId]) pilihId = res.data[0]?.id ?? null; // pilihan lama tidak ada di halaman ini
+
                     if (!res.data.length) {
-                        $('#tableData').html(emptyTable(6, 'Belum ada pegawai', 'Tambahkan pegawai baru.'));
+                        $('#tableData').html(emptyTable(5, 'Belum ada pegawai', 'Tambahkan pegawai baru.'));
                     } else {
-                        $('#tableData').html(res.data.map((item, i) => {
-                            rows[item.id] = item;
-                            const toggle = item.id === authId ? '' : `
-                                <button type="button" onclick="toggleAktif(${item.id})" title="${item.aktif ? 'Nonaktifkan' : 'Aktifkan'}"
-                                    class="h-10 w-10 rounded-xl ${item.aktif ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'}">
-                                    <i class="fa-solid ${item.aktif ? 'fa-user-slash' : 'fa-user-check'}"></i>
-                                </button>`;
-                            return `
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-6 py-4">${res.from + i}</td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-3">
-                                            ${fotoHtml(item)}
-                                            <div>
-                                                <div class="font-semibold">${esc(item.name)}</div>
-                                                <div class="text-xs text-slate-400">${esc(item.email)}</div>
-                                                <div class="text-xs text-slate-400">NIK: ${esc(item.nik || '-')} · ${esc(item.otoritas?.nama ?? '-')}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div>${esc(item.cabang?.nama ?? '-')}</div>
-                                        <div class="text-xs text-slate-400">${esc(item.divisi?.nama ?? '-')} / ${esc(item.jabatan?.nama ?? '-')}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div>${capitalize(item.status_kerja)}</div>
-                                        <div class="text-xs text-slate-400">Masuk: ${formatTanggal(item.tanggal_masuk)}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span class="inline-block rounded-lg px-3 py-1 text-[11px] font-semibold ${item.aktif ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'}">
-                                            ${item.aktif ? 'Aktif' : 'Nonaktif'}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex justify-center gap-2">
-                                            <button type="button" onclick="editUser(${item.id})" title="Edit"
-                                                class="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                            ${toggle}
-                                        </div>
-                                    </td>
-                                </tr>`;
-                        }).join(''));
+                        renderTabel();
                     }
+                    $('#profilCepat').html(profil(rows[pilihId]));
                     renderInfo('#info', res);
                     renderPagination(res, 'loadData');
                 },
-                error: () => $('#tableData').html(tableError(6)),
+                error: () => $('#tableData').html(tableError(5)),
             });
         }
 
@@ -327,7 +456,7 @@
 
             debounceSearch('#search', () => loadData());
             refreshData('#btnRefresh', '#search', () => loadData());
-            $('#filter_cabang, #filter_divisi, #filter_aktif').on('change', () => loadData());
+            $('#filter_cabang, #filter_divisi, #filter_status_kerja, #filter_aktif').on('change', () => loadData());
             $('#divisi_id').on('change', function() {
                 renderJabatan($(this).val(), $('#jabatan_id').val());
             });

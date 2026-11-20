@@ -22,6 +22,7 @@ class JabatanController extends Controller
 
         $data = Jabatan::query()
             ->with('divisi:id,nama')
+            ->withCount(['pegawai' => fn ($q) => $q->where('aktif', true)])
             ->when($search, fn ($q) => $q->where('nama', 'like', "%{$search}%"))
             ->when($request->integer('divisi_id'), fn ($q, $id) => $q->where('divisi_id', $id))
             ->orderBy('nama')

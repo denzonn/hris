@@ -37,7 +37,7 @@ class UserController extends Controller
         $search = $request->string('search')->trim()->value();
 
         $data = User::query()
-            ->with('otoritas:id,nama', 'cabang:id,nama', 'divisi:id,nama', 'jabatan:id,nama')
+            ->with('otoritas:id,nama', 'cabang:id,nama', 'divisi:id,nama', 'jabatan:id,nama', 'jabatan.jobdesk:id,jabatan_id,deskripsi')
             ->when($search, fn ($q) => $q->where(fn ($q) => $q
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
@@ -45,6 +45,8 @@ class UserController extends Controller
             ->when($request->integer('cabang_id'), fn ($q, $id) => $q->where('cabang_id', $id))
             ->when($request->integer('divisi_id'), fn ($q, $id) => $q->where('divisi_id', $id))
             ->when($request->filled('aktif'), fn ($q) => $q->where('aktif', $request->boolean('aktif')))
+            ->when(in_array($request->input('status_kerja'), ['tetap', 'kontrak', 'magang'], true),
+                fn ($q) => $q->where('status_kerja', $request->input('status_kerja')))
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 10), 100));
 

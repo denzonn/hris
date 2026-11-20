@@ -42,16 +42,27 @@ test('validasi jobdesk', function () {
         ->assertJsonValidationErrors(['jabatan_id', 'deskripsi']);
 });
 
-test('data jobdesk bisa difilter per jabatan', function () {
+test('data jobdesk dikelompokkan per jabatan dan bisa difilter', function () {
     $lain = Jabatan::create(['nama' => 'Kasir', 'divisi_id' => $this->jabatan->divisi_id]);
     Jobdesk::create(['jabatan_id' => $this->jabatan->id, 'deskripsi' => 'A']);
-    Jobdesk::create(['jabatan_id' => $lain->id, 'deskripsi' => 'B']);
+    Jobdesk::create(['jabatan_id' => $lain->id, 'deskripsi' => 'B1']);
+    Jobdesk::create(['jabatan_id' => $lain->id, 'deskripsi' => 'Hitung kas']);
+    User::factory()->create(['jabatan_id' => $lain->id]);
+    User::factory()->nonaktif()->create(['jabatan_id' => $lain->id]); // nonaktif tidak dihitung
 
     $this->actingAs($this->admin)->getJson("/jobdesk/data?jabatan_id={$lain->id}")
         ->assertOk()
         ->assertJsonPath('total', 1)
-        ->assertJsonPath('data.0.deskripsi', 'B')
-        ->assertJsonPath('data.0.jabatan.nama', 'Kasir');
+        ->assertJsonPath('data.0.nama', 'Kasir')
+        ->assertJsonPath('data.0.jobdesk.0.deskripsi', 'B1')
+        ->assertJsonPath('data.0.jobdesk.1.deskripsi', 'Hitung kas')
+        ->assertJsonPath('data.0.pegawai_count', 1);
+
+    // cari berdasarkan isi tugas → jabatan pemiliknya
+    $this->actingAs($this->admin)->getJson('/jobdesk/data?search=kas')
+        ->assertJsonPath('total', 1)->assertJsonPath('data.0.nama', 'Kasir');
+    // jabatan tanpa jobdesk tetap tampil (supaya bisa ditambah dari kartunya)
+    $this->actingAs($this->admin)->getJson('/jobdesk/data')->assertJsonPath('total', 2);
 });
 
 test('jobdesk ikut terhapus saat jabatan dihapus', function () {

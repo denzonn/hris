@@ -20,6 +20,7 @@ class DivisiController extends Controller
         $search = $request->string('search')->trim()->value();
 
         $data = Divisi::query()
+            ->withCount(['jabatan', 'pegawai' => fn ($q) => $q->where('aktif', true)])
             ->when($search, fn ($q) => $q->where('nama', 'like', "%{$search}%"))
             ->orderBy('nama')
             ->paginate(min($request->integer('per_page', 10), 100));

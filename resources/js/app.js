@@ -441,3 +441,26 @@ window.formatBadgeStatus = function (status) {
 
     return `<span class="inline-block px-3 py-1 rounded-lg ${badgeClass} text-[11px] font-semibold">${label}</span>`;
 };
+
+// Inisial untuk avatar: "Rina HRD" → "RH"
+window.inisial = function (nama) {
+    return String(nama ?? "")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((k) => k.charAt(0).toUpperCase())
+        .join("") || "?";
+};
+
+// Warna konsisten per id (mis. divisi): badge, titik, avatar.
+window.warnaKategori = function (id) {
+    const palet = [
+        { badge: "bg-red-50 text-red-700", dot: "bg-red-600", avatar: "bg-red-100 text-red-700" },
+        { badge: "bg-sky-50 text-sky-700", dot: "bg-sky-600", avatar: "bg-sky-100 text-sky-700" },
+        { badge: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-600", avatar: "bg-emerald-100 text-emerald-700" },
+        { badge: "bg-amber-50 text-amber-700", dot: "bg-amber-500", avatar: "bg-amber-100 text-amber-700" },
+        { badge: "bg-violet-50 text-violet-700", dot: "bg-violet-600", avatar: "bg-violet-100 text-violet-700" },
+        { badge: "bg-slate-100 text-slate-700", dot: "bg-slate-500", avatar: "bg-slate-200 text-slate-700" },
+    ];
+    return id ? palet[(Number(id) - 1) % palet.length] : palet[5];
+};

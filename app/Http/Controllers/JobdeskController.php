@@ -18,15 +18,19 @@ class JobdeskController extends Controller
         ]);
     }
 
+    /** Satu baris = satu jabatan beserta daftar jobdesk-nya (ditampilkan sebagai kartu). */
     public function data(Request $request): JsonResponse
     {
         $search = $request->string('search')->trim()->value();
 
-        $data = Jobdesk::query()
-            ->with('jabatan:id,nama,divisi_id', 'jabatan.divisi:id,nama')
-            ->when($search, fn ($q) => $q->where('deskripsi', 'like', "%{$search}%"))
-            ->when($request->integer('jabatan_id'), fn ($q, $id) => $q->where('jabatan_id', $id))
-            ->latest('id')
+        $data = Jabatan::query()
+            ->with(['divisi:id,nama', 'jobdesk' => fn ($q) => $q->orderBy('id')])
+            ->withCount(['pegawai' => fn ($q) => $q->where('aktif', true)])
+            ->withMax('jobdesk', 'updated_at')
+            ->when($search, fn ($q) => $q->where(fn ($w) => $w->where('nama', 'like', "%{$search}%")
+                ->orWhereHas('jobdesk', fn ($j) => $j->where('deskripsi', 'like', "%{$search}%"))))
+            ->when($request->integer('jabatan_id'), fn ($q, $id) => $q->whereKey($id))
+            ->orderBy('nama')
             ->paginate(min($request->integer('per_page', 10), 100));
 
         return response()->json($data);
