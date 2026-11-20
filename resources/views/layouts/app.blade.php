@@ -56,7 +56,10 @@
                     </div>
                 </div>
 
-                @include('includes.navbar')
+                <div class="flex shrink-0 items-center gap-3">
+                    @stack('header-action')
+                    @include('includes.navbar')
+                </div>
 
             </header>
 

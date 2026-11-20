@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absensi;
+use App\Models\Divisi;
+use App\Models\Jabatan;
+use App\Models\Jobdesk;
 use App\Models\Lembur;
 use App\Models\PayrollDetail;
 use App\Models\PengajuanIzin;
@@ -42,6 +45,11 @@ class DashboardController extends Controller
                 ->orderBy('tanggal_akhir_kontrak')->limit(10)
                 ->get(['id', 'name', 'nik', 'jabatan_id', 'status_kerja', 'tanggal_akhir_kontrak']),
             'bisaAbsen' => (bool) $user->cabang_id,
+            'jumlah' => [
+                'divisi' => Divisi::count(),
+                'jabatan' => Jabatan::count(),
+                'jobdesk' => Jobdesk::count(),
+            ],
         ]);
     }
 

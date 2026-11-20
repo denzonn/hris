@@ -32,7 +32,7 @@ class LemburController extends Controller
         $bulan = $request->string('bulan')->value(); // format Y-m
 
         $data = Lembur::query()
-            ->with(['user:id,name,nik', 'penyetuju:id,name'])
+            ->with(['user:id,name,nik,divisi_id,jabatan_id', 'user.divisi:id,nama', 'user.jabatan:id,nama', 'penyetuju:id,name'])
             ->when($this->isKaryawan($request), fn ($q) => $q->where('user_id', $request->user()->id))
             ->when($search, fn ($q) => $q->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")))
             ->when(in_array($request->input('status'), Lembur::STATUS, true), fn ($q) => $q->where('status', $request->input('status')))

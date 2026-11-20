@@ -3,6 +3,7 @@
 use App\Models\Absensi;
 use App\Models\Cabang;
 use App\Models\HariLibur;
+use App\Models\Lembur;
 use App\Models\PengajuanIzin;
 use App\Models\User;
 use Carbon\Carbon;
@@ -152,4 +153,28 @@ test('karyawan hanya melihat pengajuan miliknya', function () {
 
     $this->actingAs($this->karyawan)->getJson('/izin_karyawan/data')->assertJsonPath('total', 1);
     $this->actingAs($this->hr)->getJson('/izin_karyawan/data')->assertJsonPath('total', 2);
+});
+
+test('kpi persetujuan menghitung antrean, izin bulan ini, jam lembur & yang disetujui', function () {
+    buatIzin($this->karyawan);                                   // pending, 21 Nov
+    buatIzin($this->karyawan, ['tanggal_mulai' => '2026-11-02', 'tanggal_selesai' => '2026-11-02', 'status' => 'disetujui']);
+    buatIzin($this->karyawan, ['tanggal_mulai' => '2026-10-01', 'tanggal_selesai' => '2026-10-01']); // bulan lalu, pending
+    $lembur = fn ($tgl, $mulai, $selesai, $status) => Lembur::create([
+        'user_id' => $this->karyawan->id, 'tanggal' => $tgl, 'jam_mulai' => $mulai, 'jam_selesai' => $selesai, 'status' => $status,
+    ]);
+    $lembur('2026-11-10', '17:00', '20:00', 'disetujui'); // 3 jam
+    $lembur('2026-11-11', '17:00', '18:30', 'disetujui'); // 1,5 jam
+    $lembur('2026-11-12', '17:00', '19:00', 'pending');
+    $lembur('2026-10-30', '17:00', '19:00', 'disetujui'); // bulan lalu
+
+    $kpi = $this->actingAs($this->hr)->get('/izin_karyawan')->assertOk()->viewData('kpi');
+
+    expect($kpi)->toBe([
+        'pending_izin' => 2,
+        'pending_lembur' => 1,
+        'izin_bulan_ini' => 2,          // 21 Nov & 2 Nov
+        'jam_lembur' => 4.5,            // 3 + 1,5 (November, disetujui)
+        'disetujui_bulan_ini' => 3,     // 1 izin + 2 lembur
+    ]);
+    expect($this->actingAs($this->karyawan)->get('/izin_karyawan')->viewData('kpi'))->toBeNull();
 });

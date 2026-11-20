@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IzinKaryawanRequest;
 use App\Models\Absensi;
+use App\Models\Lembur;
 use App\Models\Payroll;
 use App\Models\PengajuanIzin;
 use App\Models\User;
@@ -32,7 +33,24 @@ class IzinKaryawanController extends Controller
             'sisaCuti' => $request->user()->sisaCuti(),
             'pegawai' => $isKaryawan ? collect() : User::where('aktif', true)
                 ->where('otoritas_id', '!=', 1)->orderBy('name')->get(['id', 'name', 'nik']),
+            'kpi' => $isKaryawan ? null : $this->kpi(),
         ]);
+    }
+
+    /** Ringkasan untuk HR/Admin. "Bulan ini" = tanggal izin/lembur jatuh di bulan berjalan. */
+    private function kpi(): array
+    {
+        $bulan = [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()];
+        $lemburDisetujui = Lembur::where('status', 'disetujui')->whereBetween('tanggal', $bulan)->get(['jam_mulai', 'jam_selesai']);
+
+        return [
+            'pending_izin' => PengajuanIzin::where('status', 'pending')->count(),
+            'pending_lembur' => Lembur::where('status', 'pending')->count(),
+            'izin_bulan_ini' => PengajuanIzin::whereBetween('tanggal_mulai', $bulan)->count(),
+            'jam_lembur' => round($lemburDisetujui->sum(fn ($l) => strtotime($l->jam_selesai) - strtotime($l->jam_mulai)) / 3600, 1),
+            'disetujui_bulan_ini' => PengajuanIzin::where('status', 'disetujui')->whereBetween('tanggal_mulai', $bulan)->count()
+                + $lemburDisetujui->count(),
+        ];
     }
 
     public function data(Request $request): JsonResponse
@@ -40,7 +58,7 @@ class IzinKaryawanController extends Controller
         $search = $request->string('search')->trim()->value();
 
         $data = PengajuanIzin::query()
-            ->with(['user:id,name,nik', 'penyetuju:id,name'])
+            ->with(['user:id,name,nik,divisi_id,jabatan_id', 'user.divisi:id,nama', 'user.jabatan:id,nama', 'penyetuju:id,name'])
             ->when($this->isKaryawan($request), fn ($q) => $q->where('user_id', $request->user()->id))
             ->when($search, fn ($q) => $q->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")))
             ->when(in_array($request->input('status'), ['pending', 'disetujui', 'ditolak'], true), fn ($q) => $q->where('status', $request->input('status')))
