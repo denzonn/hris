@@ -22,7 +22,7 @@
                 </h2>
 
                 <p class="text-xs text-slate-400">
-                    Acas Variasi
+                    Sistem HR
                 </p>
 
             </div>

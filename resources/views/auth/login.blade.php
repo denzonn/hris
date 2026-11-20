@@ -44,7 +44,7 @@
                             </h1>
 
                             <p class="mt-1 text-red-100">
-                                Sistem HR · Acas Variasi
+                                Sistem Informasi SDM
                             </p>
 
                         </div>
@@ -65,7 +65,7 @@
 
                         <p class="mt-7 max-w-lg text-lg leading-8 text-red-100">
 
-                            Platform internal Acas Variasi untuk membantu
+                            Platform internal perusahaan untuk membantu
                             pengelolaan data karyawan, absensi, cuti,
                             payroll, serta administrasi perusahaan
                             secara cepat dan efisien.
@@ -412,7 +412,7 @@
                             © {{ date('Y') }}
                             <span class="font-semibold text-slate-700">
 
-                                Acas Variasi
+                                HUMORA
 
                             </span>
 
@@ -420,7 +420,7 @@
 
                         <p class="mt-1 text-xs text-slate-400">
 
-                            HUMORA · Sistem HR
+                            Sistem Informasi SDM
 
                         </p>
 

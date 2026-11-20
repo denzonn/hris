@@ -1,13 +1,13 @@
 @extends('layouts.landing')
 
-@section('title', 'Karir – Acas Variasi')
+@section('title', 'Karir – HUMORA')
 
 @section('content')
     <div class="min-h-screen bg-slate-50">
         <header class="bg-gradient-to-br from-[#620E0E] via-[#8F1111] to-[#B91C1C] text-white">
             <div class="mx-auto max-w-5xl px-6 py-14">
                 <div class="flex items-center justify-between">
-                    <p class="text-sm font-semibold uppercase tracking-widest text-white/70">Acas Variasi</p>
+                    <p class="text-sm font-semibold uppercase tracking-widest text-white/70">HUMORA</p>
                     <a href="{{ route('login') }}" class="text-sm text-white/80 hover:text-white">Login Karyawan</a>
                 </div>
                 <h1 class="mt-6 text-3xl font-bold md:text-4xl">Bergabung bersama kami</h1>

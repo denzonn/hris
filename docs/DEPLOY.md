@@ -1,4 +1,4 @@
-# Deploy HUMORA – Acas Variasi
+# Deploy HUMORA
 
 Checklist memasang aplikasi di server production (VPS Linux / hosting dengan akses SSH & cron).
 

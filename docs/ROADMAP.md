@@ -1,4 +1,4 @@
-# Roadmap HUMORA (HRIS) – Acas Variasi
+# Roadmap HUMORA (HRIS)
 
 Stack: Laravel 12 · Blade · Tailwind · jQuery (AJAX + helper di `resources/js/helpers`) · SweetAlert2 · Select2 · Flatpickr · MySQL · Pest.
 

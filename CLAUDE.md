@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**HUMORA** — HRIS (absensi, payroll, master pegawai, rekrutmen) untuk **Acas Variasi**. Bahasa UI & penamaan domain: **Bahasa Indonesia**.
+**HUMORA** — HRIS (absensi, payroll, master pegawai, rekrutmen). Bahasa UI & penamaan domain: **Bahasa Indonesia**.
 
 ## Dokumen
 

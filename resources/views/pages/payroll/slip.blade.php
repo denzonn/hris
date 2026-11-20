@@ -33,7 +33,7 @@
     <div class="slip mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <div class="flex items-start justify-between border-b border-slate-200 pb-4">
             <div>
-                <h1 class="text-xl font-bold">Acas Variasi</h1>
+                <h1 class="text-xl font-bold">HUMORA</h1>
                 <p class="text-slate-500">Slip Gaji – {{ $periode }}</p>
             </div>
             <div class="text-right text-xs text-slate-500">
@@ -87,7 +87,7 @@
             <span class="text-lg font-bold">{{ $rp($d->gaji_bersih) }}</span>
         </div>
 
-        <p class="mt-8 text-xs text-slate-400">Dokumen ini dibuat otomatis oleh HUMORA, sistem HR Acas Variasi.</p>
+        <p class="mt-8 text-xs text-slate-400">Dokumen ini dibuat otomatis oleh HUMORA.</p>
     </div>
 </body>
 

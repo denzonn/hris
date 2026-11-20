@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', $lowongan->judul.' – Karir Acas Variasi')
+@section('title', $lowongan->judul.' – Karir HUMORA')
 
 @section('content')
     <div class="min-h-screen bg-slate-50">
