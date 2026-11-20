@@ -23,7 +23,7 @@
 
         <aside id="sidebar"
             class="fixed top-0 left-0
-                   w-[280px]
+                   w-64
                    h-screen
                    bg-white
                    border-r border-slate-200
@@ -41,81 +41,39 @@
         <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/40 z-40 lg:hidden">
         </div>
 
-        <div class="flex-1 min-w-0 lg:ml-[280px] flex flex-col min-h-screen">
+        <div class="flex-1 min-w-0 lg:ml-64 flex flex-col min-h-screen">
 
-            <header
-                class="sticky top-0 z-30
-                    h-[72px]
-                    bg-white
-                    border-b border-slate-200
-                    px-8
-                    flex items-center justify-between">
+            <header class="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
 
-                <div class="flex items-center gap-4">
-
-                    <button id="openSidebar" class="lg:hidden w-10 h-10 rounded-xl hover:bg-slate-100">
-
+                <div class="flex min-w-0 items-center gap-3">
+                    <button id="openSidebar" class="h-10 w-10 shrink-0 rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden" aria-label="Buka menu">
                         <i class="fa-solid fa-bars"></i>
-
                     </button>
 
-                    <div>
-
-                        <h1 class="text-xl font-semibold text-slate-800">
-                            @yield('page_title')
-                        </h1>
-
-                        <p class="text-sm text-slate-400">
-                            @yield('page_description')
-                        </p>
-
+                    <div class="min-w-0">
+                        <h1 class="truncate text-lg font-bold text-slate-800">@yield('page_title')</h1>
+                        <p class="truncate text-xs text-slate-500">@yield('page_description')</p>
                     </div>
-
                 </div>
 
                 @include('includes.navbar')
 
             </header>
 
-            <main class="flex-1 min-w-0 p-6 lg:p-8 overflow-x-hidden">
+            <main class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
 
                 @yield('content')
 
             </main>
 
-            <footer
-                class="bg-white/60 backdrop-blur-md
-                border-t border-slate-100
-                px-8 py-4">
-
-                <div class="flex items-center justify-between">
-
-                    <div>
-
-                        <h5 class="text-sm font-semibold text-slate-700">
-                            HUMORA
-                        </h5>
-
-                        <p class="text-xs text-slate-400">
-                            © {{ date('Y') }} All rights reserved.
-                        </p>
-
-                    </div>
-
-                    <div class="text-right">
-
-                        <p class="text-sm text-slate-500">
-                            Sistem HR
-                        </p>
-
-                        <p class="text-xs text-slate-400">
-                            Version 1.0.0
-                        </p>
-
-                    </div>
-
+            <footer class="flex flex-col gap-1 border-t border-slate-200 bg-white px-8 py-4 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <span class="font-semibold text-slate-800">HUMORA</span> © {{ date('Y') }} All rights reserved.
                 </div>
-
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    Version 1.0.0
+                </div>
             </footer>
 
         </div>

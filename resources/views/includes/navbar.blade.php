@@ -1,57 +1,40 @@
-<div class="relative hidden md:block">
+@php($saya = auth()->user())
 
-    <button id="profileButton" class="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-slate-100 transition">
+<div class="relative shrink-0">
 
-        <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-100">
+    <button id="profileButton" class="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-100">
 
-            @if (auth()->user()->foto)
-                <img src="{{ asset('storage/'.auth()->user()->foto) }}" alt="" class="w-full h-full object-cover">
-            @else
-                <div class="w-full h-full flex items-center justify-center">
+        @if ($saya->foto)
+            <img src="{{ asset('storage/'.$saya->foto) }}" alt="" class="h-9 w-9 rounded-full border border-primary/20 object-cover">
+        @else
+            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-red-100 text-sm font-bold text-red-800">
+                {{ collect(explode(' ', trim($saya->name)))->take(2)->map(fn ($k) => mb_strtoupper(mb_substr($k, 0, 1)))->join('') }}
+            </div>
+        @endif
 
-                    <i class="fa-solid fa-user text-slate-500"></i>
-
-                </div>
-            @endif
-
+        <div class="hidden text-left sm:block">
+            <p class="text-xs font-semibold leading-tight text-slate-800">{{ $saya->name }}</p>
+            <p class="text-[11px] text-slate-500">{{ $saya->otoritas?->nama }}</p>
         </div>
 
-        <div class="hidden md:block text-left">
-
-            <h4 class="text-sm font-semibold text-slate-700">
-                {{ auth()->user()->name }}
-            </h4>
-
-            <p class="text-xs text-slate-400">
-                {{ auth()->user()->otoritas?->nama }}
-            </p>
-
-        </div>
-
-        <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+        <i class="fa-solid fa-chevron-down text-[10px] text-slate-500"></i>
 
     </button>
 
     <div id="profileDropdown"
-        class="hidden absolute right-0 mt-3 w-56 bg-white border border-slate-200 rounded-2xl shadow-lg overflow-hidden">
+        class="absolute right-0 mt-2 hidden w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
 
-        <a href="{{ route('profile') }}" class="flex items-center gap-3 px-5 py-3 text-slate-700 hover:bg-slate-50">
-            <i class="fa-solid fa-user w-5"></i>
+        <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+            <i class="fa-solid fa-user w-5 text-slate-500"></i>
             Profil
         </a>
 
-        <form action="{{ route('logout') }}" method="POST">
-
+        <form action="{{ route('logout') }}" method="POST" class="border-t border-slate-100">
             @csrf
-
-            <button class="w-full text-left px-5 py-3 text-red-600 hover:bg-red-50 flex items-center gap-3">
-
+            <button class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50">
                 <i class="fa-solid fa-right-from-bracket w-5"></i>
-
                 Logout
-
             </button>
-
         </form>
 
     </div>
