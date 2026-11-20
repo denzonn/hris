@@ -18,7 +18,7 @@
             <div>
 
                 <h2 class="font-semibold text-slate-800">
-                    HRIS
+                    HUMORA
                 </h2>
 
                 <p class="text-xs text-slate-400">

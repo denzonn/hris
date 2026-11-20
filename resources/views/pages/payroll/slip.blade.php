@@ -87,7 +87,7 @@
             <span class="text-lg font-bold">{{ $rp($d->gaji_bersih) }}</span>
         </div>
 
-        <p class="mt-8 text-xs text-slate-400">Dokumen ini dibuat otomatis oleh sistem HRIS Acas Variasi.</p>
+        <p class="mt-8 text-xs text-slate-400">Dokumen ini dibuat otomatis oleh HUMORA, sistem HR Acas Variasi.</p>
     </div>
 </body>
 

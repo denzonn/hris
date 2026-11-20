@@ -1,4 +1,4 @@
-# Deploy HRIS – Acas Variasi
+# Deploy HUMORA – Acas Variasi
 
 Checklist memasang aplikasi di server production (VPS Linux / hosting dengan akses SSH & cron).
 

@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Login - Acas HRIS')
+@section('title', 'Login - HUMORA')
 
 @section('content')
     <div class="min-h-screen bg-slate-100">
@@ -40,11 +40,11 @@
                         <div>
 
                             <h1 class="text-4xl font-bold tracking-tight text-white">
-                                Acas Variasi
+                                HUMORA
                             </h1>
 
                             <p class="mt-1 text-red-100">
-                                Human Resource Information System
+                                Sistem HR · Acas Variasi
                             </p>
 
                         </div>
@@ -175,7 +175,7 @@
                         <div>
 
                             <h3 class="text-3xl font-bold text-white">
-                                HRIS
+                                HUMORA
                             </h3>
 
                             <p class="text-red-100">
@@ -238,7 +238,7 @@
                             <span
                                 class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-700">
 
-                                ACAS HRIS
+                                HUMORA
 
                             </span>
 
@@ -420,7 +420,7 @@
 
                         <p class="mt-1 text-xs text-slate-400">
 
-                            Human Resource Information System
+                            HUMORA · Sistem HR
 
                         </p>
 
